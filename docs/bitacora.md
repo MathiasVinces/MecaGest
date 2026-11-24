@@ -102,3 +102,10 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Verificación: `npm run check` aprobó 42/42 pruebas de backend/contrato y compilación. `npm run test:e2e` aprobó 14/14 pruebas de navegador en 29,8 segundos con Chrome local. La ejecución inicial detectó un selector ambiguo por el marcado de placa/modelo y se corrigió antes de aprobar el recorrido.
 - Casos: flujo completo, login erróneo, cierre y revocación, roles/asignación, placa duplicada, búsqueda, HTML ingresado tratado como texto, navegación por teclado y sesión vencida. Cada test crea su propio servidor y SQLite aislado.
 - Pendientes: observar la nueva suite en GitHub Actions; la evaluación con personas reales no se sustituye con automatización.
+
+## 13. Preparar el uso y la exposición de la aplicación
+
+- Fecha: 24-11-2026. Drivers: entrega reproducible y explicación de CU-01 a CU-05.
+- Cambios: lanzador de Windows, consulta local de credenciales, README actualizado, arquitectura de la interfaz, trazabilidad y evidencia; guía de ocho minutos para el jueves 26 con formularios, preguntas y texto para Moodle.
+- Verificación: se conservan los resultados de 42 pruebas de backend y 14 de navegador del incremento anterior. Los comandos de la guía corresponden a los scripts versionados. No se incluyen datos ni contraseñas locales en Git.
+- Pendientes del equipo: ensayar, completar integrantes/paralelo y enviar la entrega. Las entrevistas y escenarios de calidad no medidos permanecen pendientes.

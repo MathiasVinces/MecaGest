@@ -2,7 +2,7 @@
 
 Sistema académico para gestionar servicios de un taller. Implementa **ingreso, diagnóstico, autorización, reparación e historial** como monolito en capas. Entrega del Criterio 2 del RdA1, semana 5, continuando los avances C1P1 y C1P2.
 
-La interfaz de demostración es **Swagger UI**. Esta versión entrega la API; no incluye un panel comercial de gestión.
+Incluye una **aplicación web con formularios** para clientes, vehículos, órdenes e historial, conectada a la API y a SQLite. Swagger permite explorar el contrato técnico por separado.
 
 ## Instalación y arranque
 
@@ -17,11 +17,24 @@ npm run build
 npm start
 ```
 
-Abrir **http://127.0.0.1:3000/docs/**. Contrato: **http://127.0.0.1:3000/openapi.yaml**. Estado del proceso: **http://127.0.0.1:3000/health**.
+Abrir la aplicación en **http://127.0.0.1:3000/**. En Windows también se puede hacer doble clic en **INICIAR-MECAGEST.cmd**, que instala dependencias si faltan, prepara usuarios, compila e inicia el servidor. Mantener su ventana abierta; no arrancar dos servidores en el mismo puerto.
+
+Swagger: **http://127.0.0.1:3000/docs/**. Contrato: **http://127.0.0.1:3000/openapi.yaml**. Estado: **http://127.0.0.1:3000/health**.
 
 `seed` crea `admin`, `recepcion` y `mecanico` con contraseñas aleatorias. Las guarda en **`.local/credenciales-<marca-de-tiempo>.json`** y muestra la ruta. Abrirlo localmente; no copiarlo a GitHub ni Moodle. Repetir seed conserva usuarios, contraseñas y datos existentes. No hay recuperación web de contraseñas: si se pierde el archivo, usar una base nueva mediante `DATABASE_PATH` y ejecutar seed para otra demostración.
 
 Durante desarrollo se puede sustituir compilación/arranque por `npm run dev`.
+
+## Usar la aplicación
+
+1. En otra terminal, ejecutar `npm run credenciales` y consultar la contraseña local antes de compartir pantalla.
+2. Entrar en la aplicación con `admin` para realizar la demostración completa.
+3. Crear un cliente ficticio en **Clientes** y asociarle un vehículo en **Vehículos**.
+4. Crear una orden, seleccionar vehículo y mecánico, y escribir el motivo del ingreso.
+5. Abrir la orden: completar diagnóstico, registrar autorización, iniciar reparación, registrar actividades y finalizar.
+6. Buscar la placa en **Historial** para consultar lo realizado.
+
+Las opciones disponibles dependen del rol. El servidor verifica permisos aunque alguien intente saltarse la interfaz. El resumen muestra los registros reales de esta instalación. La aplicación funciona localmente: GitHub contiene el código, no aloja este servidor ni su base de datos.
 
 ## Demo y pruebas
 
@@ -33,13 +46,22 @@ npm run demo
 
 La demo usa las credenciales locales, crea datos ficticios y recorre los cinco flujos, incluyendo autorización prohibida, incidencia, reanudación e historial final. Imprime los IDs y una placa nueva, sin tokens ni contraseñas. Cada ejecución añade registros persistentes. El login permite 10 intentos por IP/minuto; esperar un minuto si se repite demasiado rápido.
 
-Comprobación completa, sin servidor ni seed:
+Comprobación de código, API y compilación, sin servidor ni seed:
 
 ```sh
 npm run check
 ```
 
-Ejecuta TypeScript estricto, Vitest y compilación. Las pruebas usan Supertest y SQLite real aislado, sin tocar la base de demostración. Cubren éxito y errores de cada flujo, sesiones, capas, contrato, 20 intentos restringidos y 30 interrupciones SQL. GitHub Actions ejecuta los mismos controles. Ver [evidencia](docs/evidencia.md).
+Ejecuta TypeScript estricto, sintaxis del JavaScript de la interfaz, **42 pruebas Vitest** y compilación. Las pruebas usan Supertest y SQLite real aislado, sin tocar la base de demostración. Cubren éxito y errores de cada flujo, sesiones, capas, contrato, 20 intentos restringidos y 30 interrupciones SQL.
+
+Pruebas de navegador (instalar Chromium una vez):
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
+
+Ejecutan **14 pruebas**, siete escenarios en escritorio y móvil, con su propio servidor y base aislada. GitHub Actions ejecuta ambos grupos y comprueba que el contrato generado no cambie. Ver [evidencia](docs/evidencia.md).
 
 Otros comandos: `npm test`, `npm run test:watch`, `npm run typecheck` y `npm run api:generate`.
 
@@ -59,12 +81,14 @@ Para cambiar de rol, iniciar sesión y sustituir el token de Authorize. Los UUID
 
 ```text
 src/presentation/      rutas HTTP, autenticación de solicitudes y errores
+src/presentation/web/  aplicación web HTML, CSS y JavaScript
 src/application/       casos de uso, validaciones, permisos y estados
 src/persistence/       SQL, esquema, repositorios y transacciones
 src/domain/            tipos compartidos sin dependencias de otras capas
 src/bootstrap.ts       composición de las capas
 src/server.ts          arranque y cierre del servidor
 tests/                 pruebas de flujos, errores, contrato y drivers
+e2e/                   pruebas de navegador en escritorio y móvil
 scripts/               seed, demo y generación del contrato
 docs/openapi.yaml      contrato versionado de 17 operaciones
 docs/bitacora.md        incrementos reales y verificaciones

@@ -2,13 +2,15 @@
 
 ```mermaid
 flowchart TD
-  H[Cliente HTTP / Swagger] --> P[Presentación: HTTP y errores]
+  H[Aplicación web / Swagger] --> P[Presentación: HTTP y errores]
   P --> A[Aplicación: casos de uso y reglas]
   A --> R[Persistencia: SQL y transacciones]
   R --> DB[(SQLite en archivo)]
 ```
 
 Los servicios comprueban roles, validan entradas con Zod y coordinan repositorios. Los repositorios usan SQL parametrizado; no deciden permisos ni transiciones. `bootstrap.ts` compone las capas y `domain` solo contiene tipos. `tests/architecture.test.ts` verifica las dependencias prohibidas.
+
+La interfaz de `src/presentation/web/` se sirve desde el mismo proceso Express y usa la API mediante `fetch`. Ofrece formularios y adapta las acciones visibles al rol; las reglas y permisos definitivos permanecen en aplicación. No accede directamente a SQLite. El token se guarda en `sessionStorage` de la pestaña; las contraseñas no se guardan en el navegador. El texto ingresado se escapa antes de insertarlo en HTML. El cierre de sesión revoca el token en el servidor.
 
 ## Modelo y estados
 

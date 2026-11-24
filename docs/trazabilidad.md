@@ -4,10 +4,10 @@ Fuentes: C1P1 del 05-11-2026, C1P2 del 12-11-2026 e instrucciones/rúbrica del C
 
 | Criterio | Máximo | Evidencia |
 |---|---:|---|
-| Flujos funcionales | 15 | `src/application/`, `tests/api.test.ts`, `scripts/demo.ts` |
+| Flujos funcionales | 15 | `src/presentation/web/`, `src/application/`, `tests/api.test.ts`, `e2e/workshop.spec.ts` |
 | Capas y dependencias | 12 | presentation/application/persistence, bootstrap, `tests/architecture.test.ts` |
 | OpenAPI | 8 | `docs/openapi.yaml`, `/docs/`, `tests/contract.test.ts` |
-| Pruebas | 10 | `npm run check`, `tests/`, workflow CI |
+| Pruebas | 10 | `npm run check`, `npm run test:e2e`, `tests/`, `e2e/`, workflow CI |
 | Bitácora y drivers | 5 | `docs/bitacora.md`, esta matriz, `docs/evidencia.md` |
 
 Los máximos son de la rúbrica, no una nota autoasignada. La evaluación corresponde al docente.
@@ -26,9 +26,9 @@ Las rutas de negocio tienen prefijo `/api/`.
 |---|---|---|
 | QA-03 Integridad | P1 | 30 fallos SQL controlados y rollback comprobado en `tests/quality.test.ts` |
 | QA-02 Roles | P1* | 20 intentos bloqueados y autorizaciones intactas; control de asignación |
-| QA-04 Usabilidad | P2 | Mensajes de validación y guía; pendiente prueba con 5 participantes |
+| QA-04 Usabilidad | P2 | Formularios, errores, navegación por teclado y pruebas en dos tamaños; pendiente prueba con 5 participantes |
 | QA-01 Rendimiento | P2 | Índices; pendiente carga de 2.000 vehículos/10.000 órdenes, 200 búsquedas y 10 usuarios |
 | QA-05 Disponibilidad | P2 | `/health` y reapertura; pendiente jornada de 8 horas/480 verificaciones |
 | QA-06 Modificabilidad | P3 | Capas y regresión; pendiente modificación de campo cronometrada |
 
-R-01 se refleja en claves foráneas; R-02 en autorización previa; R-03 en roles; R-04 en alcance excluido; R-05 sigue siendo supuesto del taller; R-06 se materializa como asignación obligatoria de mecánico. Swagger no sustituye el formulario y el estudio de usuarios de QA-04.
+R-01 se refleja en claves foráneas; R-02 en autorización previa; R-03 en roles; R-04 en alcance excluido; R-05 sigue siendo supuesto del taller; R-06 se materializa como asignación obligatoria de mecánico. La interfaz y sus pruebas automatizadas no sustituyen el estudio con participantes de QA-04.
