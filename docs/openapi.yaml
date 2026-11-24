@@ -1,0 +1,1956 @@
+# Generado con npm run api:generate; editar scripts/generate-openapi.mjs
+openapi: 3.0.3
+info:
+  title: MecaGest API
+  version: 1.0.0
+  description: Monolito académico para un taller. Todos los textos se recortan y rechazan campos desconocidos.
+    No se envían credenciales en la URL. Los ejemplos son ficticios. La autenticación habilita los permisos
+    del rol, no el acceso a otros talleres. Despliegue local de evaluación; no incluye facturación, pagos ni
+    multi-taller.
+servers:
+  - url: /
+    description: Mismo servidor que sirve este contrato
+security:
+  - bearerAuth: []
+tags:
+  - name: Sistema
+  - name: Sesión
+  - name: Catálogos
+  - name: CU-01 Ingreso
+  - name: CU-02 Diagnóstico
+  - name: CU-03 Autorización
+  - name: CU-04 Reparación
+  - name: CU-05 Historial
+paths:
+  /health:
+    get:
+      operationId: health
+      summary: Comprobar que responde el proceso HTTP
+      description: No verifica servicios externos ni acredita disponibilidad de 8 horas.
+      tags:
+        - Sistema
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      security: []
+  /api/auth/login:
+    post:
+      operationId: login
+      summary: Iniciar sesión
+      description: Credenciales generadas por npm run seed. Responde INVALID_CREDENTIALS (401) si no coinciden.
+        Token Bearer opaco con vigencia de 8 horas. Máximo 10 intentos/IP/minuto.
+      tags:
+        - Sesión
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "429":
+          description: Máximo 10 intentos de inicio de sesión por minuto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: TOO_MANY_ATTEMPTS
+                  message: Máximo 10 intentos de inicio de sesión por minuto
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+  /api/auth/session:
+    delete:
+      operationId: logout
+      summary: Cerrar la sesión actual
+      description: ""
+      tags:
+        - Sesión
+      responses:
+        "204":
+          description: Sesión revocada, sin cuerpo
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+  /api/me:
+    get:
+      operationId: currentUser
+      summary: Consultar usuario autenticado
+      description: ""
+      tags:
+        - Sesión
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+  /api/mechanics:
+    get:
+      operationId: listMechanics
+      summary: Listar mecánicos para asignación
+      description: ADMIN o RECEPTIONIST.
+      tags:
+        - Catálogos
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+  /api/clients:
+    get:
+      operationId: listClients
+      summary: Listar clientes
+      description: ADMIN o RECEPTIONIST.
+      tags:
+        - Catálogos
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Client"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+    post:
+      operationId: createClient
+      summary: Registrar cliente
+      description: ADMIN o RECEPTIONIST. Datos ficticios durante demostraciones.
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "201":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientInput"
+            example:
+              name: Cliente de demostración
+              phone: "0000000000"
+  /api/vehicles:
+    get:
+      operationId: listVehicles
+      summary: Listar vehículos
+      description: ""
+      tags:
+        - Catálogos
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+    post:
+      operationId: createVehicle
+      summary: Registrar vehículo de un cliente
+      description: ADMIN o RECEPTIONIST. 404 si el cliente no existe; 409 DUPLICATE_PLATE si la placa normalizada ya
+        está registrada.
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "201":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleInput"
+            example:
+              clientId: 11111111-1111-4111-8111-111111111111
+              plate: DEM-0001
+              brand: Marca demo
+              model: Modelo demo
+  /api/orders:
+    get:
+      operationId: listOrders
+      summary: Listar órdenes del taller
+      description: ""
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+    post:
+      operationId: createOrder
+      summary: Crear orden y asignar mecánico
+      description: ADMIN o RECEPTIONIST. Estado inicial RECEIVED. 404 si el vehículo o usuario no existe; 422
+        INVALID_MECHANIC si no es mecánico; 409 OPEN_ORDER_EXISTS si existe una orden abierta del vehículo.
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "201":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+            example:
+              vehicleId: 11111111-1111-4111-8111-111111111111
+              mechanicId: 11111111-1111-4111-8111-111111111111
+              reason: Ruido al frenar
+  /api/orders/{id}:
+    get:
+      operationId: getOrder
+      summary: Consultar detalle completo de la orden
+      description: ""
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID de la orden
+          schema:
+            type: string
+            format: uuid
+  /api/orders/{id}/diagnosis:
+    put:
+      operationId: saveDiagnosis
+      summary: Guardar diagnóstico borrador o completo
+      description: ADMIN o mecánico asignado (403 NOT_ASSIGNED en otro caso). Desde RECEIVED/DIAGNOSING.
+        complete=false deja DIAGNOSING; complete=true pasa a AWAITING_AUTHORIZATION y bloquea posteriores
+        ediciones.
+      tags:
+        - CU-02 Diagnóstico
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisInput"
+            example:
+              findings: Pastillas desgastadas
+              recommendedWork: Cambiar pastillas y comprobar frenos
+              complete: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID de la orden
+          schema:
+            type: string
+            format: uuid
+  /api/orders/{id}/authorization:
+    post:
+      operationId: authorizeOrder
+      summary: Registrar aceptación o rechazo del cliente
+      description: Solo ADMIN (encargado). Requiere AWAITING_AUTHORIZATION. La constancia es obligatoria. APPROVED
+        pasa a AUTHORIZED; REJECTED termina la orden. La decisión no puede sobrescribirse.
+      tags:
+        - CU-03 Autorización
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorizationInput"
+            example:
+              decision: APPROVED
+              evidence: Constancia ficticia para demostración académica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID de la orden
+          schema:
+            type: string
+            format: uuid
+  /api/orders/{id}/repair/start:
+    post:
+      operationId: startRepair
+      summary: Iniciar reparación autorizada
+      description: ADMIN o mecánico asignado. Solo desde AUTHORIZED; pasa a IN_REPAIR. Sin cuerpo.
+      tags:
+        - CU-04 Reparación
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID de la orden
+          schema:
+            type: string
+            format: uuid
+  /api/orders/{id}/repairs:
+    post:
+      operationId: recordRepair
+      summary: Registrar avance, incidencia o finalización
+      description: ADMIN o mecánico asignado. Desde IN_REPAIR/BLOCKED. PROGRESS pasa a IN_REPAIR, BLOCKED conserva
+        pendiente por incidencia, COMPLETED cierra. Actividad y estado se guardan en la misma transacción. Un
+        trabajo adicional no se considera aprobado automáticamente.
+      tags:
+        - CU-04 Reparación
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RepairInput"
+            example:
+              activity: Pastillas sustituidas y frenos comprobados
+              outcome: COMPLETED
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID de la orden
+          schema:
+            type: string
+            format: uuid
+  /api/vehicles/by-plate/{plate}/history:
+    get:
+      operationId: getVehicleHistory
+      summary: Consultar historial por placa
+      description: "ADMIN o MECHANIC. Devuelve todas las órdenes, incluso abiertas/rechazadas, con diagnóstico,
+        autorización y actividades. Un vehículo conocido sin órdenes devuelve 200, orders=[] y mensaje
+        explícito. Vehículo inexistente: 404."
+      tags:
+        - CU-05 Historial
+      responses:
+        "200":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/History"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      parameters:
+        - name: plate
+          in: path
+          required: true
+          description: Placa; se normaliza igual que al crear el vehículo
+          schema:
+            type: string
+            maxLength: 14
+            pattern: ^[a-zA-Z0-9 -]+$
+            description: Se eliminan espacios y guiones y se convierte a mayúsculas. El resultado debe tener entre 5 y 10
+              letras o dígitos.
+          example: DEM-0001
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Token obtenido con POST /api/auth/login
+  schemas:
+    User:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - username
+        - role
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+          minLength: 1
+          maxLength: 80
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - RECEPTIONIST
+            - MECHANIC
+    LoginInput:
+      type: object
+      additionalProperties: false
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 80
+        password:
+          type: string
+          minLength: 1
+          maxLength: 128
+          writeOnly: true
+    Session:
+      type: object
+      additionalProperties: false
+      required:
+        - token
+        - expiresAt
+        - user
+      properties:
+        token:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        expiresAt:
+          type: string
+          format: date-time
+        user:
+          $ref: "#/components/schemas/User"
+    ClientInput:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - phone
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        phone:
+          type: string
+          pattern: ^[+0-9 ()-]{5,25}$
+    Client:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - phone
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        phone:
+          type: string
+          minLength: 5
+          maxLength: 25
+        createdAt:
+          type: string
+          format: date-time
+    VehicleInput:
+      type: object
+      additionalProperties: false
+      required:
+        - clientId
+        - plate
+        - brand
+        - model
+      properties:
+        clientId:
+          type: string
+          format: uuid
+        plate:
+          type: string
+          maxLength: 14
+          pattern: ^[a-zA-Z0-9 -]+$
+          description: Se eliminan espacios y guiones y se convierte a mayúsculas. El resultado debe tener entre 5 y 10
+            letras o dígitos.
+        brand:
+          type: string
+          minLength: 1
+          maxLength: 80
+        model:
+          type: string
+          minLength: 1
+          maxLength: 80
+    Vehicle:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - clientId
+        - plate
+        - brand
+        - model
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+          format: uuid
+        plate:
+          type: string
+          pattern: ^[A-Z0-9]{5,10}$
+        brand:
+          type: string
+          minLength: 1
+          maxLength: 80
+        model:
+          type: string
+          minLength: 1
+          maxLength: 80
+        createdAt:
+          type: string
+          format: date-time
+    OrderInput:
+      type: object
+      additionalProperties: false
+      required:
+        - vehicleId
+        - mechanicId
+        - reason
+      properties:
+        vehicleId:
+          type: string
+          format: uuid
+        mechanicId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    Order:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - vehicleId
+        - mechanicId
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        vehicleId:
+          type: string
+          format: uuid
+        mechanicId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        status:
+          type: string
+          enum:
+            - RECEIVED
+            - DIAGNOSING
+            - AWAITING_AUTHORIZATION
+            - AUTHORIZED
+            - REJECTED
+            - IN_REPAIR
+            - BLOCKED
+            - COMPLETED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DiagnosisInput:
+      type: object
+      additionalProperties: false
+      required:
+        - findings
+        - recommendedWork
+        - complete
+      properties:
+        findings:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        recommendedWork:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        complete:
+          type: boolean
+    Diagnosis:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - findings
+        - recommendedWork
+        - complete
+        - recordedBy
+        - updatedAt
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        findings:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        recommendedWork:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        complete:
+          type: boolean
+        recordedBy:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+    AuthorizationInput:
+      type: object
+      additionalProperties: false
+      required:
+        - decision
+        - evidence
+      properties:
+        decision:
+          type: string
+          enum:
+            - APPROVED
+            - REJECTED
+        evidence:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    Authorization:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - decision
+        - evidence
+        - recordedBy
+        - createdAt
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        decision:
+          type: string
+          enum:
+            - APPROVED
+            - REJECTED
+        evidence:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        recordedBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    RepairInput:
+      type: object
+      additionalProperties: false
+      required:
+        - activity
+        - outcome
+      properties:
+        activity:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        outcome:
+          type: string
+          enum:
+            - PROGRESS
+            - BLOCKED
+            - COMPLETED
+    Repair:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - orderId
+        - activity
+        - outcome
+        - recordedBy
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+          format: uuid
+        activity:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        outcome:
+          type: string
+          enum:
+            - PROGRESS
+            - BLOCKED
+            - COMPLETED
+        recordedBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    Health:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - service
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+        service:
+          type: string
+          enum:
+            - MecaGest
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            message:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            details:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                  - field
+                  - message
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+                    minLength: 1
+                    maxLength: 2000
+    OrderDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - vehicleId
+        - mechanicId
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+        - diagnosis
+        - authorization
+        - repairs
+      properties:
+        id:
+          type: string
+          format: uuid
+        vehicleId:
+          type: string
+          format: uuid
+        mechanicId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        status:
+          type: string
+          enum:
+            - RECEIVED
+            - DIAGNOSING
+            - AWAITING_AUTHORIZATION
+            - AUTHORIZED
+            - REJECTED
+            - IN_REPAIR
+            - BLOCKED
+            - COMPLETED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        diagnosis:
+          type: object
+          additionalProperties: false
+          required:
+            - orderId
+            - findings
+            - recommendedWork
+            - complete
+            - recordedBy
+            - updatedAt
+          properties:
+            orderId:
+              type: string
+              format: uuid
+            findings:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            recommendedWork:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            complete:
+              type: boolean
+            recordedBy:
+              type: string
+              format: uuid
+            updatedAt:
+              type: string
+              format: date-time
+          nullable: true
+        authorization:
+          type: object
+          additionalProperties: false
+          required:
+            - orderId
+            - decision
+            - evidence
+            - recordedBy
+            - createdAt
+          properties:
+            orderId:
+              type: string
+              format: uuid
+            decision:
+              type: string
+              enum:
+                - APPROVED
+                - REJECTED
+            evidence:
+              type: string
+              minLength: 1
+              maxLength: 2000
+            recordedBy:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+          nullable: true
+        repairs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Repair"
+      example:
+        id: 11111111-1111-4111-8111-111111111111
+        vehicleId: 11111111-1111-4111-8111-111111111111
+        mechanicId: 11111111-1111-4111-8111-111111111111
+        reason: Ruido al frenar
+        status: RECEIVED
+        createdAt: 2026-11-24T12:00:00.000Z
+        updatedAt: 2026-11-24T12:00:00.000Z
+        diagnosis: null
+        authorization: null
+        repairs: []
+    History:
+      type: object
+      additionalProperties: false
+      required:
+        - vehicle
+        - orders
+        - message
+      properties:
+        vehicle:
+          $ref: "#/components/schemas/Vehicle"
+        orders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderDetail"
+        message:
+          type: string
+          minLength: 1
+          maxLength: 2000

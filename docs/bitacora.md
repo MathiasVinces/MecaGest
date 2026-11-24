@@ -52,3 +52,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Resultado: 5/5 pruebas aprobadas; 20/20 intentos restringidos devuelven 403 sin alterar autorizaciones; 30/30 interrupciones revierten actividad y estado; reintentos posteriores funcionan.
 - Límite de la evidencia: fallos SQL controlados, no cortes físicos de energía ni red. QA-01, QA-04, QA-05 y QA-06 completos no se declaran medidos.
 - Pendientes: contrato OpenAPI, instrucciones reproducibles, revisión final y publicación.
+
+## 07. Contrato OpenAPI verificable
+
+- Drivers: contrato de API del Criterio 2, CU-01 a CU-05, QA-06.
+- Cambios: `docs/openapi.yaml` (17 operaciones), generador versionado, Swagger UI en `/docs/`, esquemas de entrada/salida, errores, ejemplos ficticios y permisos de cada operación.
+- Pruebas: validación del documento con Swagger Parser y validación de respuestas reales con AJV; comparación de rutas HTTP contra el contrato.
+- Resultado inicial: se corrigieron dos errores de sintaxis del generador y la importación CommonJS de AJV Formats; después, 3/3 pruebas del contrato aprobaron. Los casos se aislaron para no depender del orden de ejecución.
+- Pendientes: comprobación conjunta final, manual de arranque/demo y publicación.

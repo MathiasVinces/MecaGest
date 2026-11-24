@@ -15,7 +15,8 @@
     "seed": "tsx --env-file-if-exists=.env scripts/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run typecheck && npm test && npm run build"
+    "check": "npm run typecheck && npm test && npm run build",
+    "api:generate": "node scripts/generate-openapi.mjs"
   },
   "dependencies": {
     "express": "^5.3.0",
