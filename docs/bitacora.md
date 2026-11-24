@@ -43,3 +43,12 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: `npm run typecheck`; `npm test -- tests/api.test.ts`.
 - Resultado: 24/24 pruebas HTTP aprobadas, con base SQLite real, casos exitosos y no exitosos para cada flujo.
 - Pendientes: completar OpenAPI y la guía de demostración; medir escenarios de calidad prioritarios.
+
+## 06. Comprobar permisos, atomicidad y dependencias
+
+- Drivers: QA-02 (P1), QA-03 (P1), arquitectura por capas.
+- Cambios: pruebas de intentos restringidos; interrupciones mediante triggers temporales del motor SQLite antes/después de actividad y después del cambio de estado; verificación de importaciones entre capas.
+- Pruebas: `npm test -- tests/quality.test.ts tests/architecture.test.ts`.
+- Resultado: 5/5 pruebas aprobadas; 20/20 intentos restringidos devuelven 403 sin alterar autorizaciones; 30/30 interrupciones revierten actividad y estado; reintentos posteriores funcionan.
+- Límite de la evidencia: fallos SQL controlados, no cortes físicos de energía ni red. QA-01, QA-04, QA-05 y QA-06 completos no se declaran medidos.
+- Pendientes: contrato OpenAPI, instrucciones reproducibles, revisión final y publicación.
