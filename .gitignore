@@ -7,3 +7,5 @@ data/
 tmp/
 *.sqlite*
 *.log
+test-results/
+playwright-report/

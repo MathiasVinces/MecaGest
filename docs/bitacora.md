@@ -94,3 +94,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Verificación: recorrido completo mediante formularios en escritorio y móvil; capturas revisadas de acceso, resumen y orden finalizada. Se corrigió el marcado de la placa para separarla del modelo y el salto de teclado al contenido para conservar la vista actual.
 - Resultado: interfaz conectada a SQLite mediante la API; no se añadieron reglas de negocio en los controladores ni en la persistencia.
 - Pendientes: versionar pruebas de navegador y actualizar la guía de exposición. El estudio de usabilidad con cinco participantes sigue pendiente.
+
+## 12. Probar la aplicación en escritorio y móvil
+
+- Drivers: regresión CU-01 a CU-05, QA-02 y apoyo técnico a QA-04.
+- Cambios: Playwright con siete escenarios en dos tamaños (1440×1000 y 390×844); CI instala Chromium y ejecuta la suite; exclusión de reportes; Vitest limitado a `tests/` para no descubrir clones temporales ni tests de navegador.
+- Verificación: `npm run check` aprobó 42/42 pruebas de backend/contrato y compilación. `npm run test:e2e` aprobó 14/14 pruebas de navegador en 29,8 segundos con Chrome local. La ejecución inicial detectó un selector ambiguo por el marcado de placa/modelo y se corrigió antes de aprobar el recorrido.
+- Casos: flujo completo, login erróneo, cierre y revocación, roles/asignación, placa duplicada, búsqueda, HTML ingresado tratado como texto, navegación por teclado y sesión vencida. Cada test crea su propio servidor y SQLite aislado.
+- Pendientes: observar la nueva suite en GitHub Actions; la evaluación con personas reales no se sustituye con automatización.

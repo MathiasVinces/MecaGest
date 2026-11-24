@@ -15,9 +15,12 @@
     "seed": "tsx --env-file-if-exists=.env scripts/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run typecheck && npm test && npm run build",
+    "check": "npm run typecheck && npm run check:ui && npm test && npm run build",
     "api:generate": "node scripts/generate-openapi.mjs",
-    "demo": "tsx --env-file-if-exists=.env scripts/demo.ts"
+    "demo": "tsx --env-file-if-exists=.env scripts/demo.ts",
+    "test:e2e": "playwright test",
+    "check:ui": "node --check src/presentation/web/app.js && node --check src/presentation/web/ui.js",
+    "credenciales": "node scripts/show-credentials.mjs"
   },
   "dependencies": {
     "express": "^5.3.0",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^13.1.0",
+    "@playwright/test": "^1.65.1",
     "@types/express": "^5.0.6",
     "@types/node": "^24.19.2",
     "@types/supertest": "^7.2.1",
