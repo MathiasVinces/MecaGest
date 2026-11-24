@@ -35,3 +35,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: `npm run typecheck`; `npm test -- tests/application.test.ts`.
 - Resultado: 3/3 pruebas aprobadas; recorrido completo y caminos de rechazo/transición indebida.
 - Pendientes: HTTP, contrato, pruebas de errores de cada flujo y evidencia cuantitativa de QA-02/QA-03.
+
+## 05. Exponer y comprobar la API HTTP
+
+- Drivers: CU-01 a CU-05; separación de responsabilidades del Criterio 2; QA-02.
+- Cambios: controladores Express, composición de capas, servidor local, errores JSON, límite de tamaño y de intentos de login; punto de entrada Swagger (contrato pendiente del siguiente incremento).
+- Pruebas: `npm run typecheck`; `npm test -- tests/api.test.ts`.
+- Resultado: 24/24 pruebas HTTP aprobadas, con base SQLite real, casos exitosos y no exitosos para cada flujo.
+- Pendientes: completar OpenAPI y la guía de demostración; medir escenarios de calidad prioritarios.
