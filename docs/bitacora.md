@@ -60,3 +60,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: validación del documento con Swagger Parser y validación de respuestas reales con AJV; comparación de rutas HTTP contra el contrato.
 - Resultado inicial: se corrigieron dos errores de sintaxis del generador y la importación CommonJS de AJV Formats; después, 3/3 pruebas del contrato aprobaron. Los casos se aislaron para no depender del orden de ejecución.
 - Pendientes: comprobación conjunta final, manual de arranque/demo y publicación.
+
+## 08. Preparar demostración y documentación de entrega
+
+- Drivers: cinco CU, trazabilidad con la rúbrica, reproducibilidad y QA-04 como apoyo documental.
+- Cambios: README de instalación, configuración y Swagger; demo HTTP de datos ficticios; diagramas y decisiones; matriz de rúbrica/drivers; guía de exposición/Moodle; evidencia de ejecución.
+- Pruebas: `npm run check`, `npm run seed`, `npm start`, `npm run demo`, `git diff --check`.
+- Resultado: 42/42 pruebas en 7 archivos, TypeScript y compilación correctos; demo real completada con autorización prohibida 403, incidencia, cierre e historial persistido. Sin errores de espacios en el diff.
+- Pendientes: publicación en GitHub y comprobación remota; identificación académica y validación con taller a cargo del equipo.
