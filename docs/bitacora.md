@@ -18,3 +18,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: `npm run typecheck`; `npm test -- tests/persistence.test.ts`.
 - Resultado: compilación sin errores y 3/3 pruebas aprobadas (FK, rollback, reapertura de archivo).
 - Pendientes: integrar reglas de aplicación y HTTP; simular fallos durante reparaciones completas.
+
+## 03. Autenticación y permisos básicos
+
+- Drivers: R-03, QA-02 (P1), precondición autenticada de CU-01.
+- Cambios: contraseñas con scrypt y sal aleatoria; sesiones de 8 horas con token almacenado como hash; cierre de sesión; roles ADMIN, RECEPTIONIST y MECHANIC; preparación local idempotente de usuarios.
+- Pruebas: `npm run typecheck`; `npm test -- tests/auth.test.ts`.
+- Resultado: 4/4 pruebas aprobadas (sesión, revocación, expiración, credenciales y permisos).
+- Pendientes: aplicar estos permisos a las operaciones HTTP; la preparación genera contraseñas nuevas solo en archivos ignorados por Git.
