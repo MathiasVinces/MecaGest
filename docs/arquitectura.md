@@ -68,7 +68,7 @@ Las contraseñas usan scrypt con sal aleatoria. Se generan tokens de 32 bytes al
 
 ## SQLite y límites
 
-La consigna cita PostgreSQL como referencia y permite equivalentes. SQLite permite una entrega reproducible con Node.js 24 y persistencia relacional real, claves foráneas y transacciones. El esquema tiene versión y las pruebas reabren un archivo para verificar durabilidad entre procesos.
+La consigna cita PostgreSQL como referencia y permite equivalentes. SQLite permite una entrega reproducible con Node.js 24 y persistencia relacional real, claves foráneas y transacciones. El esquema tiene versión y las pruebas cierran y reabren un archivo para verificar conservación de registros.
 
 Las escrituras se serializan y las llamadas son síncronas. No se extrapolan estos resultados a alta carga ni a varios talleres/procesos. Migrar a PostgreSQL afectaría la persistencia y sus pruebas; los controladores no deberían cambiar.
 

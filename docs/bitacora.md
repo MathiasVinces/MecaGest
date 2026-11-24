@@ -76,3 +76,12 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Verificación local: la misma secuencia `npm run check` aprobó 42 pruebas y compilación. La base y los archivos de credenciales no están versionados.
 - Publicación: el equipo creó el repositorio público `MathiasVinces/MecaGest`; se verificó propiedad y permiso de escritura. La subida se realiza mediante la conexión GitHub de Mathias porque Git local no tiene credenciales guardadas.
 - Pendientes: observar el resultado del workflow remoto después de subir; no se marca como aprobado anticipadamente.
+
+## 10. Verificar publicación y cerrar la evidencia
+
+- Drivers: reproducibilidad y evidencia verificable del Criterio 2; trazabilidad de todos los CU.
+- Cambios: evidencia con enlaces a CI, referencia funcional para Moodle y precisión sobre la prueba de reapertura de SQLite.
+- Pruebas adicionales justificadas: instalación con `npm ci` desde clon limpio; 42/42 pruebas y compilación correctas; revisión visual de Swagger (17 operaciones); lectura de los resultados reales de Actions en `main` y `codex/criterio-2`.
+- Resultado remoto: `931f4984a1514ea969e5d81e4fab5695d835b010` aprobado en las ejecuciones 45349646637 y 45349679517. Código disponible públicamente en `https://github.com/MathiasVinces/MecaGest`.
+- Publicación: los incrementos se trasladaron mediante la API de GitHub preservando mensajes, orden y árboles de archivos; cada árbol remoto coincidió con el local. Los SHA remotos son distintos; no se simularon fechas ni autores alternativos.
+- Pendientes del equipo: nombres/paralelo, lectura y defensa del código, envío en Moodle, entrevistas y escenarios de calidad aún no medidos. No hay credenciales ni bases de datos versionadas.

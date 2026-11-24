@@ -36,4 +36,14 @@ Los tests no necesitan credenciales, servidor externo ni seed. El contrato puede
 
 ## Pendientes y límites
 
-QA-01 (carga), QA-04 (participantes), QA-05 (8 horas) y QA-06 (modificación cronometrada) no se presentan como cumplidos. Las reglas y roles siguen pendientes de validación con un taller. La ejecución de CI remota y la referencia pública se confirmarán tras publicar; este documento no atribuye a GitHub una ejecución local.
+QA-01 (carga), QA-04 (participantes), QA-05 (8 horas) y QA-06 (modificación cronometrada) no se presentan como cumplidos. Las reglas y roles siguen pendientes de validación con un taller.
+
+## Instalación limpia, revisión visual y CI remota
+
+- Se clonó el contenido versionado en una carpeta nueva sin base ni credenciales. `npm ci` y `npm run check` finalizaron correctamente: 42/42 pruebas, 7 archivos y compilación. Vitest registró 12,36 segundos en esa segunda ejecución.
+- Se abrió Swagger en Chrome sin interfaz, con contexto aislado: título `MecaGest | API del taller`, 17 operaciones visibles. Se inspeccionó una captura para comprobar legibilidad y ausencia de errores de carga.
+- Repositorio público: [MathiasVinces/MecaGest](https://github.com/MathiasVinces/MecaGest).
+- Versión funcional comprobada: `931f4984a1514ea969e5d81e4fab5695d835b010`. Los cambios posteriores de cierre actualizan documentación/evidencia.
+- GitHub Actions en Ubuntu/Node.js 24: [main, ejecución 45349646637](https://github.com/MathiasVinces/MecaGest/actions/runs/45349646637) y [codex/criterio-2, ejecución 45349679517](https://github.com/MathiasVinces/MecaGest/actions/runs/45349679517), ambas con resultado **success**. Se observaron instalación, regeneración OpenAPI sin diferencias y `npm run check` aprobados.
+
+Los incrementos locales se publicaron usando la API de GitHub, conservando sus archivos y mensajes en el mismo orden. Se comprobó la igualdad del árbol Git en cada incremento; sus SHA cambiaron al crear los commits remotos. Se añadió un commit inicial para crear el repositorio vacío. No se alteraron fechas para simular trabajo previo.

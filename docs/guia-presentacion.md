@@ -28,7 +28,7 @@ Completar integrantes, paralelo y responsable con datos del equipo. Ejecutar `np
 MecaGest - Criterio 2 del RdA1, semana 5
 Repositorio: https://github.com/MathiasVinces/MecaGest
 Rama: codex/criterio-2
-Commit: [copiar el SHA publicado con git rev-parse HEAD]
+Commit funcional validado: 931f4984a1514ea969e5d81e4fab5695d835b010
 Requisitos: Node.js 24.x y npm
 Instalar: npm ci
 Preparar usuarios: npm run seed
@@ -40,4 +40,4 @@ Explorador API local: http://127.0.0.1:3000/docs/
 Integrantes y paralelo: [completar por el equipo]
 ```
 
-Verificar que el repositorio público y el commit indicado sean accesibles antes de enviar. El envío en Moodle lo realiza el equipo.
+El commit indicado contiene la implementación completa y pasó GitHub Actions. Los commits posteriores de cierre actualizan documentación/evidencia. Para entregar el estado más reciente, sustituirlo por `git rev-parse HEAD` tras verificar su workflow. El envío en Moodle lo realiza el equipo.
