@@ -15,7 +15,8 @@ export function createApp(services: Services, reportError: (error: unknown) => v
   app.disable('x-powered-by');
   app.use((_req, res, next) => { res.set('X-Content-Type-Options', 'nosniff'); res.set('Cache-Control', 'no-store'); next(); });
   app.use(express.json({ limit: '32kb' }));
-  app.get('/', (_req, res) => res.redirect('/docs/'));
+  app.get('/', (_req, res) => res.sendFile(resolve('src/presentation/web/index.html')));
+  app.use('/assets', express.static(resolve('src/presentation/web'), { index: false, dotfiles: 'deny' }));
   app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'MecaGest' }));
   app.get('/openapi.yaml', (_req, res) => res.sendFile(resolve('docs/openapi.yaml')));
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, {

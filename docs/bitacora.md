@@ -85,3 +85,12 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Resultado remoto: `931f4984a1514ea969e5d81e4fab5695d835b010` aprobado en las ejecuciones 45349646637 y 45349679517. Código disponible públicamente en `https://github.com/MathiasVinces/MecaGest`.
 - Publicación: los incrementos se trasladaron mediante la API de GitHub preservando mensajes, orden y árboles de archivos; cada árbol remoto coincidió con el local. Los SHA remotos son distintos; no se simularon fechas ni autores alternativos.
 - Pendientes del equipo: nombres/paralelo, lectura y defensa del código, envío en Moodle, entrevistas y escenarios de calidad aún no medidos. No hay credenciales ni bases de datos versionadas.
+
+## 11. Incorporar la aplicación web del taller
+
+- Fecha: 24-11-2026. Drivers: CU-01 a CU-05, QA-04 (formularios), QA-02 (roles).
+- Cambios: interfaz HTML/CSS/JavaScript servida por el mismo monolito en `/`; acceso, resumen con datos reales, clientes, vehículos, órdenes, diagnóstico, autorización, actividades, incidencias, cierre e historial. Swagger sigue disponible en `/docs/`.
+- Comportamiento: la interfaz usa las 17 operaciones existentes, respeta roles y asignación, comunica errores, evita doble envío y renueva las vistas después del guardado. La sesión se conserva solo en la pestaña y el servidor controla sus permisos y expiración.
+- Verificación: recorrido completo mediante formularios en escritorio y móvil; capturas revisadas de acceso, resumen y orden finalizada. Se corrigió el marcado de la placa para separarla del modelo y el salto de teclado al contenido para conservar la vista actual.
+- Resultado: interfaz conectada a SQLite mediante la API; no se añadieron reglas de negocio en los controladores ni en la persistencia.
+- Pendientes: versionar pruebas de navegador y actualizar la guía de exposición. El estudio de usabilidad con cinco participantes sigue pendiente.
