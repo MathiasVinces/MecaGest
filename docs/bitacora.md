@@ -26,3 +26,12 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: `npm run typecheck`; `npm test -- tests/auth.test.ts`.
 - Resultado: 4/4 pruebas aprobadas (sesión, revocación, expiración, credenciales y permisos).
 - Pendientes: aplicar estos permisos a las operaciones HTTP; la preparación genera contraseñas nuevas solo en archivos ignorados por Git.
+
+## 04. Implementar los cinco casos de uso
+
+- Drivers: CU-01 a CU-05, R-01/R-02/R-03/R-06, QA-02 y QA-03.
+- Cambios: servicios de catálogo y órdenes; validación de entradas; asignación al mecánico; diagnóstico borrador/completo; decisión con constancia; inicio, incidencias y cierre; historial por placa normalizada.
+- Reglas propuestas adicionales: una orden abierta por vehículo; rechazo y cierre son terminales; solo el mecánico asignado o administrador modifica el trabajo; la autorización queda inmutable.
+- Pruebas: `npm run typecheck`; `npm test -- tests/application.test.ts`.
+- Resultado: 3/3 pruebas aprobadas; recorrido completo y caminos de rechazo/transición indebida.
+- Pendientes: HTTP, contrato, pruebas de errores de cada flujo y evidencia cuantitativa de QA-02/QA-03.
