@@ -68,3 +68,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Pruebas: `npm run check`, `npm run seed`, `npm start`, `npm run demo`, `git diff --check`.
 - Resultado: 42/42 pruebas en 7 archivos, TypeScript y compilación correctos; demo real completada con autorización prohibida 403, incidencia, cierre e historial persistido. Sin errores de espacios en el diff.
 - Pendientes: publicación en GitHub y comprobación remota; identificación académica y validación con taller a cargo del equipo.
+
+## 09. Automatizar la verificación en GitHub
+
+- Drivers: reproducibilidad de pruebas y trazabilidad del Criterio 2; QA-06 como regresión.
+- Cambios: workflow de GitHub Actions para instalar con lockfile, regenerar el contrato sin diferencias, comprobar tipos, ejecutar pruebas y compilar con Node.js 24.
+- Verificación local: la misma secuencia `npm run check` aprobó 42 pruebas y compilación. La base y los archivos de credenciales no están versionados.
+- Publicación: el equipo creó el repositorio público `MathiasVinces/MecaGest`; se verificó propiedad y permiso de escritura. La subida se realiza mediante la conexión GitHub de Mathias porque Git local no tiene credenciales guardadas.
+- Pendientes: observar el resultado del workflow remoto después de subir; no se marca como aprobado anticipadamente.
