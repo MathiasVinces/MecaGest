@@ -139,3 +139,16 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 
 - Cambio: README, arquitectura, trazabilidad, resultados y guion de ocho minutos reflejan el ingreso único y el nuevo diseño.
 - Pendientes: observar CI de la publicación; ensayo y envío del equipo. QA-04 sigue pendiente de personas reales, incluidas las necesidades de adultos mayores. No se inventan fechas ni actividad retrospectiva en Git.
+
+## 19. Modernizar la apariencia y añadir movimiento discreto
+
+- Fecha: 25-11-2026. Petición del usuario: interfaz moderna con animaciones, manteniendo el uso sencillo.
+- Cambios: cabecera clara, navegación agrupada, tarjetas y formularios redondeados, tipografía del sistema, ilustración SVG propia del vehículo y jerarquía con blanco/azul/amarillo. `theme.css` contiene la capa visual; `styles.css` conserva estructura y controles.
+- Movimiento: entradas de pantalla, respuesta al pulsar, avisos, apertura de formularios e indicador de guardado. No se agregan esperas artificiales a las solicitudes ni animaciones continuas decorativas.
+- Verificación: 20 pruebas de navegador existentes aprobadas; revisión visual en ambos tamaños. Se corrigieron espacios junto a saltos de línea ocultos en móvil.
+
+## 20. Verificar accesibilidad del movimiento y actualizar el guion
+
+- Cambios: pruebas de `prefers-reduced-motion` en escritorio y móvil; contenido visible, formulario editable, control de al menos 48 px y ausencia de desbordamiento horizontal.
+- Verificación: ocho pruebas afectadas aprobadas tras añadir la cobertura; suite configurada con 22 pruebas de navegador. Tipos y sintaxis correctos. Las capturas se toman al final de las animaciones finitas.
+- Documentación: README, evidencia y guía actualizados. No se atribuyen resultados de usabilidad con personas reales a estas pruebas automáticas.

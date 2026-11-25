@@ -62,7 +62,7 @@ Seguir una solicitud de ingreso:
 ## Evidencia para mostrar
 
 - `npm run check`: tipos, sintaxis, 47 pruebas de backend/contrato y compilación.
-- `npm run test:e2e`: 20 pruebas de navegador, diez escenarios en dos tamaños. Instalar antes Chromium con `npx playwright install chromium`.
+- `npm run test:e2e`: 22 pruebas de navegador, once escenarios en dos tamaños. Instalar antes Chromium con `npx playwright install chromium`.
 - QA-02: 20 intentos de autorización prohibidos fueron rechazados.
 - QA-03: 30 fallos SQL provocados comprobaron rollback, sin cambios parciales. No son pruebas de cortes eléctricos.
 - `/docs/`: Swagger presenta las 18 operaciones de `docs/openapi.yaml`.
@@ -115,3 +115,5 @@ No adjuntar `.local`, bases con datos personales ni contraseñas. Al instalar, c
 «Aplicamos 60–30–10 como guía: blanco para leer, azul oscuro para orientar y amarillo para destacar la acción principal. Pasamos de cinco opciones principales a Taller, Historial y Archivo. En lugar de entrar a tres catálogos, el ingreso reúne los datos en una ficha y reconoce las placas existentes. Cada trabajo muestra primero la acción que corresponde a su estado».
 
 El tamaño base es 18 px en escritorio y 17 px en móvil, con controles amplios, texto además del color y foco visible para teclado. Esto busca facilitar el uso, pero no acredita que cualquier persona mayor pueda utilizarlo sin ayuda: sigue pendiente la evaluación con participantes de QA-04.
+
+La revisión visual posterior mantiene esos colores y el ingreso único, con cabecera clara, tarjetas redondeadas, tipografía del sistema y transiciones breves. Las animaciones se desactivan si el sistema solicita reducir movimiento.

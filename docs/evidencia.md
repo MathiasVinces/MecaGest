@@ -65,3 +65,11 @@ CI ahora instala Chromium y ejecuta pruebas de navegador además de los controle
 - Revisión visual: inicio, ficha de ingreso y trabajo terminado. Se corrigió el espacio entre lupa y texto del buscador, y se ocultó completamente el enlace de salto salvo al recibir foco. Los cuatro recorridos visuales y de teclado afectados volvieron a aprobarse.
 - Paleta elegida por el usuario: blanco, azul oscuro y amarillo; 60–30–10 como criterio de composición. Los datos de las capturas de pruebas son ficticios. No se ha medido usabilidad con adultos mayores ni se declara cumplido QA-04.
 - La comprobación remota de este rediseño se consulta en Actions para el SHA entregado; los enlaces de la etapa anterior se conservan como evidencia histórica.
+
+## Actualización visual moderna y movimiento
+
+Fecha: 25-11-2026. Se revisaron inicio, acceso, ingreso y ficha final en escritorio y móvil. La cabecera clara y las tarjetas redondeadas reemplazan la composición anterior; se conserva el flujo de negocio.
+
+Las 20 pruebas de navegador existentes aprobaron con el nuevo tema. Se añadieron dos ejecuciones de movimiento reducido (una por tamaño), y las ocho verificaciones afectadas de navegación, capturas y accesibilidad aprobaron después. La suite completa queda en 22 pruebas. TypeScript y sintaxis JavaScript aprobaron. Las capturas adelantan las animaciones finitas a su estado final para evitar inspeccionar un fotograma incompleto; las interacciones se prueban con movimiento normal salvo el caso explícito de movimiento reducido.
+
+La capa visual usa CSS y un SVG local: no necesita fuentes, bibliotecas de animación ni imágenes remotas. El resultado remoto se comprueba en Actions para el commit publicado. Las pruebas con participantes siguen pendientes.

@@ -63,7 +63,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Ejecutan **20 pruebas**, diez escenarios en escritorio y móvil, con su propio servidor y base aislada. GitHub Actions ejecuta ambos grupos y comprueba que el contrato generado no cambie. Ver [evidencia](docs/evidencia.md).
+Ejecutan **22 pruebas**, once escenarios en escritorio y móvil, con su propio servidor y base aislada. GitHub Actions ejecuta ambos grupos y comprueba que el contrato generado no cambie. Ver [evidencia](docs/evidencia.md).
 
 Otros comandos: `npm test`, `npm run test:watch`, `npm run typecheck` y `npm run api:generate`.
 
