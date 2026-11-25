@@ -29,12 +29,14 @@ Durante desarrollo se puede sustituir compilación/arranque por `npm run dev`.
 
 1. En otra terminal, ejecutar `npm run credenciales` y consultar la contraseña local antes de compartir pantalla.
 2. Entrar en la aplicación con `admin` para realizar la demostración completa.
-3. Crear un cliente ficticio en **Clientes** y asociarle un vehículo en **Vehículos**.
-4. Crear una orden, seleccionar vehículo y mecánico, y escribir el motivo del ingreso.
-5. Abrir la orden: completar diagnóstico, registrar autorización, iniciar reparación, registrar actividades y finalizar.
-6. Buscar la placa en **Historial** para consultar lo realizado.
+3. Pulsar **Recibir vehículo** y escribir la placa. Si ya existe, aparecen sus datos; si tiene un trabajo abierto, se ofrece continuarlo.
+4. En una primera visita, completar vehículo y propietario en la misma ficha. Un cliente ya registrado puede seleccionarse sin escribir sus datos otra vez.
+5. Escribir el motivo, elegir mecánico y pulsar **Guardar ingreso** una sola vez. Cliente, vehículo y orden se guardan juntos.
+6. Seguir la acción de la ficha: revisión, decisión del cliente, reparación y cierre. **Ver lo registrado** despliega los antecedentes.
+7. Buscar la placa en **Historial**. **Archivo** reúne los catálogos y todos los trabajos.
 
-Las opciones disponibles dependen del rol. El servidor verifica permisos aunque alguien intente saltarse la interfaz. El resumen muestra los registros reales de esta instalación. La aplicación funciona localmente: GitHub contiene el código, no aloja este servidor ni su base de datos.
+
+Las opciones disponibles dependen del rol. El servidor verifica permisos aunque alguien intente saltarse la interfaz. El taller muestra los trabajos abiertos de esta instalación. La aplicación funciona localmente: GitHub contiene el código, no aloja este servidor ni su base de datos.
 
 ## Demo y pruebas
 
@@ -52,7 +54,7 @@ Comprobación de código, API y compilación, sin servidor ni seed:
 npm run check
 ```
 
-Ejecuta TypeScript estricto, sintaxis del JavaScript de la interfaz, **42 pruebas Vitest** y compilación. Las pruebas usan Supertest y SQLite real aislado, sin tocar la base de demostración. Cubren éxito y errores de cada flujo, sesiones, capas, contrato, 20 intentos restringidos y 30 interrupciones SQL.
+Ejecuta TypeScript estricto, sintaxis del JavaScript de la interfaz, **47 pruebas Vitest** y compilación. Las pruebas usan Supertest y SQLite real aislado, sin tocar la base de demostración. Cubren éxito y errores de cada flujo, sesiones, capas, contrato, 20 intentos restringidos y 30 interrupciones SQL.
 
 Pruebas de navegador (instalar Chromium una vez):
 
@@ -61,7 +63,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Ejecutan **14 pruebas**, siete escenarios en escritorio y móvil, con su propio servidor y base aislada. GitHub Actions ejecuta ambos grupos y comprueba que el contrato generado no cambie. Ver [evidencia](docs/evidencia.md).
+Ejecutan **20 pruebas**, diez escenarios en escritorio y móvil, con su propio servidor y base aislada. GitHub Actions ejecuta ambos grupos y comprueba que el contrato generado no cambie. Ver [evidencia](docs/evidencia.md).
 
 Otros comandos: `npm test`, `npm run test:watch`, `npm run typecheck` y `npm run api:generate`.
 
@@ -90,7 +92,7 @@ src/server.ts          arranque y cierre del servidor
 tests/                 pruebas de flujos, errores, contrato y drivers
 e2e/                   pruebas de navegador en escritorio y móvil
 scripts/               seed, demo y generación del contrato
-docs/openapi.yaml      contrato versionado de 17 operaciones
+docs/openapi.yaml      contrato versionado de 18 operaciones
 docs/bitacora.md        incrementos reales y verificaciones
 ```
 

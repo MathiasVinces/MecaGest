@@ -117,3 +117,25 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Corrección: capturar los datos y deshabilitar todos los controles hasta terminar la solicitud y el refresco; restaurar su estado previo ante error. La prueba retiene una petición para verificar explícitamente que no se permite editar durante el guardado.
 - Aislamiento de pruebas: cerrar conexiones del servidor de prueba al terminar, incluidas las conservadas por la interceptación de red, antes de cerrar SQLite.
 - Verificación: repetir controles de código y las 14 pruebas de navegador; observar CI después de publicar la corrección.
+
+## 15. Recibir vehículos sin saltar entre catálogos
+
+- Fecha: 25-11-2026. CU-01 y QA-03.
+- Cambio: `/api/intakes` reutiliza una placa conocida o crea cliente, vehículo y orden en una sola transacción. Las rutas previas se conservan. OpenAPI pasa a 18 operaciones.
+- Evidencia: cinco pruebas nuevas de aplicación/HTTP y contrato actualizado; 47 pruebas de backend aprobadas. El fallo provocado al insertar la orden revierte también cliente y vehículo.
+
+## 16. Guiar el trabajo con una acción por etapa
+
+- Cambio: navegación Taller, Historial y Archivo; ficha única de ingreso, búsqueda de placa, reutilización de propietario, enlace a trabajos ya abiertos y acciones de cada etapa en primer plano. Antecedentes desplegables.
+- Evidencia: 20 pruebas de navegador aprobadas en escritorio y móvil; errores conservan datos y permisos permanecen controlados por servidor. No se reduce el flujo omitiendo aprobación ni diagnóstico.
+
+## 17. Definir la identidad visual del taller
+
+- Preferencia explícita del usuario: blanco, azul oscuro y amarillo. Regla 60–30–10 aplicada como guía de jerarquía, no porcentaje de píxeles medido.
+- Cambio: cabecera horizontal, fichas con placas grandes, fondo blanco, bloque azul de recepción y amarillo en acciones. Texto base de 17–18 px, foco de teclado, controles amplios y decisiones escritas además del color.
+- Revisión: capturas de escritorio y móvil. Se ajustó la separación de la lupa en el buscador y la ocultación del enlace de salto fuera del foco; cuatro pruebas afectadas aprobaron de nuevo. Se dio formato legible al código para facilitar su revisión académica.
+
+## 18. Actualizar el ensayo y la evidencia
+
+- Cambio: README, arquitectura, trazabilidad, resultados y guion de ocho minutos reflejan el ingreso único y el nuevo diseño.
+- Pendientes: observar CI de la publicación; ensayo y envío del equipo. QA-04 sigue pendiente de personas reales, incluidas las necesidades de adultos mayores. No se inventan fechas ni actividad retrospectiva en Git.

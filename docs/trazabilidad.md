@@ -14,7 +14,7 @@ Los máximos son de la rúbrica, no una nota autoasignada. La evaluación corres
 
 | Caso | Operación | Alternos/errores comprobados |
 |---|---|---|
-| CU-01 Ingreso | POST clients, vehicles, orders | Faltantes, placa duplicada, inexistentes, orden abierta, asignación inválida |
+| CU-01 Ingreso | POST intakes (ficha única); clients, vehicles, orders (individuales) | Faltantes, placa duplicada, inexistentes, orden abierta, asignación inválida |
 | CU-02 Diagnóstico | PUT orders/{id}/diagnosis | Borrador, vacío, otro mecánico, orden inexistente, estado inválido |
 | CU-03 Autorización | POST orders/{id}/authorization | Rechazo, sin diagnóstico/constancia, sin rol, sobrescritura |
 | CU-04 Reparación | POST orders/{id}/repair/start y repairs | Sin aprobación, vacío, incidencia, reanudación, orden cerrada |

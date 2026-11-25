@@ -75,3 +75,9 @@ La consigna cita PostgreSQL como referencia y permite equivalentes. SQLite permi
 Las escrituras se serializan y las llamadas son síncronas. No se extrapolan estos resultados a alta carga ni a varios talleres/procesos. Migrar a PostgreSQL afectaría la persistencia y sus pruebas; los controladores no deberían cambiar.
 
 Referencias técnicas: [SQLite en Node.js 24](https://nodejs.org/download/release/latest-v24.x/docs/api/sqlite.html), [errores de Express](https://expressjs.com/en/guide/error-handling/).
+
+## Ingreso simplificado
+
+`POST /api/intakes` lleva la ficha de recepción a `OrderService.receive`. Una placa conocida reutiliza su vehículo; una nueva requiere sus datos y un propietario nuevo o existente. La creación de cliente, vehículo y orden ocurre en una sola transacción. Se conservan las rutas individuales para catálogos y compatibilidad. Son 18 operaciones en OpenAPI.
+
+La simplificación de la interfaz no elimina aprobación, roles ni asignación. El navegador reconoce placas para ayudar a completar la ficha, pero el servidor vuelve a validar duplicados, referencias, estado y permisos antes de guardar.

@@ -57,3 +57,11 @@ Los siete escenarios se ejecutaron con tamaños 1440×1000 y 390×844: recorrido
 Se revisaron capturas de acceso, resumen y orden finalizada en ambos tamaños. Los reportes y capturas locales se excluyen del repositorio. Se corrigió la separación de placa y modelo, y el salto al contenido sin cambiar de vista. Vitest quedó limitado a `tests/` para evitar descubrir copias temporales del proyecto.
 
 CI ahora instala Chromium y ejecuta pruebas de navegador además de los controles previos. El resultado remoto debe comprobarse en Actions después de publicar; los enlaces anteriores corresponden a la etapa de API. Estas pruebas automatizadas no acreditan el estudio con cinco participantes.
+
+## Rediseño del 25 de noviembre de 2026
+
+- `npm run check`: **47 pruebas aprobadas en 8 archivos**, tipos, sintaxis y compilación. Las cinco nuevas pruebas cubren recepción atómica, reutilización de datos, errores/roles, rollback de las tres entidades y reenvío sin duplicación. El contrato incorpora la operación 18 y valida su respuesta real.
+- `npm run test:e2e`: **20/20 pruebas aprobadas en 22,5 segundos**, diez escenarios en escritorio y móvil. Incluye reconocimiento de placas, continuación de trabajo abierto, segunda visita y conservación del formulario al fallar el servidor.
+- Revisión visual: inicio, ficha de ingreso y trabajo terminado. Se corrigió el espacio entre lupa y texto del buscador, y se ocultó completamente el enlace de salto salvo al recibir foco. Los cuatro recorridos visuales y de teclado afectados volvieron a aprobarse.
+- Paleta elegida por el usuario: blanco, azul oscuro y amarillo; 60–30–10 como criterio de composición. Los datos de las capturas de pruebas son ficticios. No se ha medido usabilidad con adultos mayores ni se declara cumplido QA-04.
+- La comprobación remota de este rediseño se consulta en Actions para el SHA entregado; los enlaces de la etapa anterior se conservan como evidencia histórica.

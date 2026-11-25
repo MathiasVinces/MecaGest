@@ -34,13 +34,14 @@ Inicio posible: «MecaGest organiza el seguimiento de un vehículo dentro de un 
 
 Usar `admin`: representa al encargado y puede recorrer todos los pasos. Los otros roles tienen permisos más limitados; no existe un selector que cambie tu rol sin iniciar sesión.
 
-1. **Clientes:** crear un cliente ficticio llamado `Cliente demostración`. Usar datos de contacto ficticios.
-2. **Vehículos:** asociarle la placa `DEM0026`, marca `Toyota`, modelo `Corolla`. Si esa placa ya existe, elegir una nueva.
-3. **Órdenes:** crear una orden para ese vehículo, seleccionar `mecanico` como responsable y escribir `Ruido al frenar` como motivo.
-4. **Diagnóstico:** abrir la orden, escribir `Desgaste de pastillas delanteras; se propone reemplazo y prueba de frenado` y marcarlo completo. Explicar que ahora espera autorización.
-5. **Autorización:** registrar aceptación y una constancia ficticia: `Cliente de demostración acepta el cambio de pastillas`. El encargado registra la decisión; el cliente no tiene cuenta en esta versión.
-6. **Reparación:** iniciar, añadir `Se retiraron las pastillas desgastadas` y finalizar con `Pastillas reemplazadas y prueba de frenado realizada`. Si queda tiempo, demostrar una incidencia y su reanudación antes del cierre.
-7. **Historial:** buscar la placa y mostrar diagnóstico, autorización y actividades. Recargar la página para mostrar que los datos se conservan.
+1. En **Taller**, pulsar **Recibir vehículo**.
+2. Escribir `DEM0026`. Si no existe, completar marca `Toyota`, modelo `Corolla`, cliente `Cliente demostración` y teléfono ficticio `0000000000`. Para repetir, usar otra placa. Si el cliente ya existe, elegirlo en la lista.
+3. Escribir `Ruido al frenar`, elegir `mecanico` y pulsar **Guardar ingreso**. Explicar que antes eran tres formularios separados y ahora se guardan juntos, sin perder los registros requeridos.
+4. En **¿Qué necesita el vehículo?**, escribir `Pastillas delanteras desgastadas` y `Cambiar pastillas y comprobar frenado`. Dejar marcada la revisión terminada y pulsar **Guardar revisión**.
+5. En **¿El cliente acepta el trabajo?**, marcar aceptación y escribir una constancia ficticia: `El cliente de demostración confirmó por teléfono que acepta el cambio`. Pulsar **Guardar decisión**. El encargado registra la decisión; el cliente no tiene cuenta en esta versión.
+6. Pulsar **Iniciar reparación**. Describir la actividad, elegir si sigue en reparación, hay una demora o el trabajo está terminado, y guardar. Para cerrar: `Pastillas reemplazadas y prueba de frenado realizada`, opción **Trabajo terminado**.
+7. Abrir **Ver lo registrado** para enseñar la revisión, el permiso y las actividades. Después, buscar la placa en **Historial**. Recargar la página para mostrar la conservación de los datos.
+
 
 Frase para explicar una regla: «El servidor no permite iniciar la reparación sin aprobación. Ocultar el botón ayuda al usuario, pero el permiso también se verifica en el servicio de aplicación».
 
@@ -48,23 +49,23 @@ Para mostrar roles, cerrar sesión y entrar como `recepcion`: puede registrar in
 
 ## Explicar el código sin memorizarlo
 
-Seguir una solicitud:
+Seguir una solicitud de ingreso:
 
 1. `src/presentation/web/app.js` envía los datos del formulario a `/api/`.
 2. `src/presentation/app.ts` recibe HTTP, identifica la sesión y llama al servicio.
 3. `src/application/order-service.ts` comprueba rol, entradas y estado.
-4. `src/persistence/workshop-repository.ts` lee o escribe SQL en una transacción.
+4. `src/persistence/workshop-repository.ts` lee o escribe SQL en una transacción. El ingreso nuevo revierte cliente, vehículo y orden si falla alguno de los guardados.
 5. La respuesta vuelve al navegador y se actualiza la pantalla.
 
 «Es un monolito porque se ejecuta como una sola aplicación. Está dividido en capas para que la interfaz no ejecute SQL y para que las reglas del taller se mantengan en los servicios».
 
 ## Evidencia para mostrar
 
-- `npm run check`: tipos, sintaxis, 42 pruebas de backend/contrato y compilación.
-- `npm run test:e2e`: 14 pruebas de navegador, siete escenarios en dos tamaños. Instalar antes Chromium con `npx playwright install chromium`.
+- `npm run check`: tipos, sintaxis, 47 pruebas de backend/contrato y compilación.
+- `npm run test:e2e`: 20 pruebas de navegador, diez escenarios en dos tamaños. Instalar antes Chromium con `npx playwright install chromium`.
 - QA-02: 20 intentos de autorización prohibidos fueron rechazados.
 - QA-03: 30 fallos SQL provocados comprobaron rollback, sin cambios parciales. No son pruebas de cortes eléctricos.
-- `/docs/`: Swagger presenta las 17 operaciones de `docs/openapi.yaml`.
+- `/docs/`: Swagger presenta las 18 operaciones de `docs/openapi.yaml`.
 - GitHub y `docs/bitacora.md`: cambios concretos y resultados. La cantidad de commits no demuestra autoría ni calidad por sí sola.
 
 Las pruebas pueden quedar ejecutadas antes de exponer. Si el profesor quiere repetirlas, usan bases aisladas y no modifican los datos de la demostración.
@@ -108,3 +109,9 @@ Integrantes y paralelo: [completar por el equipo]
 ```
 
 No adjuntar `.local`, bases con datos personales ni contraseñas. Al instalar, cada evaluador genera sus propias credenciales con `seed`.
+
+## Explicar el rediseño
+
+«Aplicamos 60–30–10 como guía: blanco para leer, azul oscuro para orientar y amarillo para destacar la acción principal. Pasamos de cinco opciones principales a Taller, Historial y Archivo. En lugar de entrar a tres catálogos, el ingreso reúne los datos en una ficha y reconoce las placas existentes. Cada trabajo muestra primero la acción que corresponde a su estado».
+
+El tamaño base es 18 px en escritorio y 17 px en móvil, con controles amplios, texto además del color y foco visible para teclado. Esto busca facilitar el uso, pero no acredita que cualquier persona mayor pueda utilizarlo sin ayuda: sigue pendiente la evaluación con participantes de QA-04.
