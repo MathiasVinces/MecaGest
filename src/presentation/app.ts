@@ -56,6 +56,7 @@ export function createApp(services: Services, reportError: (error: unknown) => v
   app.get('/api/vehicles/by-plate/:plate/history', (req, res) => res.json(services.orders.history(res.locals.user as User, String(req.params.plate))));
   app.get('/api/orders', (_req, res) => res.json(services.orders.list(res.locals.user as User)));
   app.post('/api/orders', (req, res) => res.status(201).json(services.orders.create(res.locals.user as User, req.body)));
+  app.post('/api/intakes', (req, res) => res.status(201).json(services.orders.receive(res.locals.user as User, req.body)));
   app.get('/api/orders/:id', (req, res) => res.json(services.orders.detail(res.locals.user as User, String(req.params.id))));
   app.put('/api/orders/:id/diagnosis', (req, res) => res.json(services.orders.diagnose(res.locals.user as User, String(req.params.id), req.body)));
   app.post('/api/orders/:id/authorization', (req, res) => res.json(services.orders.authorize(res.locals.user as User, String(req.params.id), req.body)));

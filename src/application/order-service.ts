@@ -4,24 +4,50 @@ import { WorkshopRepository } from '../persistence/workshop-repository.js';
 import { IdentityRepository } from '../persistence/identity-repository.js';
 import { allow } from './auth-service.js';
 import { AppError, requireValue } from './errors.js';
-import { authorizationSchema, diagnosisSchema, idSchema, orderSchema, plateSchema, repairSchema } from './validation.js';
+import { authorizationSchema, diagnosisSchema, idSchema, intakeSchema, orderSchema, plateSchema, repairSchema } from './validation.js';
 
 export class OrderService {
   constructor(private readonly repo: WorkshopRepository, private readonly identities: IdentityRepository) {}
 
+  receive(user: User, input: unknown) {
+    allow(user, ['ADMIN', 'RECEPTIONIST']);
+    const data = intakeSchema.parse(input);
+    return this.repo.transaction(() => {
+      const now = new Date().toISOString();
+      let vehicle = this.repo.vehicleByPlate(data.plate);
+      if (vehicle && data.newVehicle) throw new AppError(409, 'DUPLICATE_PLATE', 'La placa ya está registrada. Vuelve a buscarla para usar sus datos.');
+      if (!vehicle) {
+        const entry = data.newVehicle;
+        if (!entry) throw new AppError(422, 'VEHICLE_DATA_REQUIRED', 'Completa los datos del vehículo y de su propietario');
+        let clientId: string;
+        if ('clientId' in entry.owner) {
+          clientId = requireValue(this.repo.client(entry.owner.clientId), 'Cliente').id;
+        } else {
+          clientId = randomUUID();
+          this.repo.insertClient({ id: clientId, ...entry.owner, createdAt: now });
+        }
+        vehicle = { id: randomUUID(), clientId, plate: data.plate, brand: entry.brand, model: entry.model, createdAt: now };
+        this.repo.insertVehicle(vehicle);
+      }
+      return this.createRecord(vehicle.id, data.mechanicId, data.reason);
+    });
+  }
+
   create(user: User, input: unknown) {
     allow(user, ['ADMIN', 'RECEPTIONIST']);
     const data = orderSchema.parse(input);
-    return this.repo.transaction(() => {
-      requireValue(this.repo.vehicle(data.vehicleId), 'Vehículo');
-      const mechanic = requireValue(this.identities.findById(data.mechanicId), 'Mecánico');
+    return this.repo.transaction(() => this.createRecord(data.vehicleId, data.mechanicId, data.reason));
+  }
+
+  private createRecord(vehicleId: string, mechanicId: string, reason: string) {
+      requireValue(this.repo.vehicle(vehicleId), 'Vehículo');
+      const mechanic = requireValue(this.identities.findById(mechanicId), 'Mecánico');
       if (mechanic.role !== 'MECHANIC') throw new AppError(422, 'INVALID_MECHANIC', 'El responsable debe tener rol de mecánico');
-      if (this.repo.openOrder(data.vehicleId)) throw new AppError(409, 'OPEN_ORDER_EXISTS', 'El vehículo ya tiene una orden abierta');
+      if (this.repo.openOrder(vehicleId)) throw new AppError(409, 'OPEN_ORDER_EXISTS', 'El vehículo ya tiene una orden abierta');
       const now = new Date().toISOString();
-      const order: Order = { id: randomUUID(), ...data, status: 'RECEIVED', createdAt: now, updatedAt: now };
+      const order: Order = { id: randomUUID(), vehicleId, mechanicId, reason, status: 'RECEIVED', createdAt: now, updatedAt: now };
       this.repo.insertOrder(order);
       return this.repo.detail(order.id)!;
-    });
   }
 
   list(user: User) { allow(user, ['ADMIN', 'RECEPTIONIST', 'MECHANIC']); return this.repo.orders(); }

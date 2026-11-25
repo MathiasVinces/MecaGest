@@ -33,6 +33,7 @@ const schemas = {
 };
 schemas.OrderDetail = object({ ...orderProperties, diagnosis: { ...schemas.Diagnosis, nullable: true }, authorization: { ...schemas.Authorization, nullable: true }, repairs: array('Repair') });
 schemas.History = object({ vehicle: ref('Vehicle'), orders: array('OrderDetail'), message: str() });
+schemas.IntakeInput = object({ plate: schemas.VehicleInput.properties.plate, mechanicId: uuid, reason: str(), newVehicle: object({ brand: str(1, 80), model: str(1, 80), owner: { oneOf: [object({ clientId: uuid }), ref('ClientInput')] } }) }, ['plate', 'mechanicId', 'reason']);
 
 const examples = {
   ClientInput: { name: 'Cliente de demostración', phone: '0000000000' },
@@ -86,6 +87,7 @@ route('post', '/api/clients', 'createClient', 'Registrar cliente', 'CU-01 Ingres
 route('get', '/api/vehicles', 'listVehicles', 'Listar vehículos', 'Catálogos', array('Vehicle'));
 route('post', '/api/vehicles', 'createVehicle', 'Registrar vehículo de un cliente', 'CU-01 Ingreso', 'Vehicle', { status: 201, input: 'VehicleInput', errors: [403, 404, 409, 422], description: 'ADMIN o RECEPTIONIST. 404 si el cliente no existe; 409 DUPLICATE_PLATE si la placa normalizada ya está registrada.' });
 route('get', '/api/orders', 'listOrders', 'Listar órdenes del taller', 'CU-01 Ingreso', array('Order'));
+route('post', '/api/intakes', 'receiveVehicle', 'Recibir vehículo con un solo guardado', 'CU-01 Ingreso', 'OrderDetail', { status: 201, input: 'IntakeInput', errors: [403, 404, 409, 422], description: 'ADMIN o RECEPTIONIST. Placa conocida: reutiliza vehículo y propietario. Placa nueva: requiere newVehicle con propietario nuevo o clientId existente. Cliente, vehículo y orden se guardan en una sola transacción. 409 si la placa ya existe y se envían datos nuevos o si tiene orden abierta. No modifica propietarios existentes.' });
 route('post', '/api/orders', 'createOrder', 'Crear orden y asignar mecánico', 'CU-01 Ingreso', 'OrderDetail', { status: 201, input: 'OrderInput', errors: [403, 404, 409, 422], description: 'ADMIN o RECEPTIONIST. Estado inicial RECEIVED. 404 si el vehículo o usuario no existe; 422 INVALID_MECHANIC si no es mecánico; 409 OPEN_ORDER_EXISTS si existe una orden abierta del vehículo.' });
 route('get', '/api/orders/{id}', 'getOrder', 'Consultar detalle completo de la orden', 'CU-01 Ingreso', 'OrderDetail', { errors: [404, 422] });
 route('put', '/api/orders/{id}/diagnosis', 'saveDiagnosis', 'Guardar diagnóstico borrador o completo', 'CU-02 Diagnóstico', 'OrderDetail', { input: 'DiagnosisInput', errors: [403, 404, 409, 422], description: 'ADMIN o mecánico asignado (403 NOT_ASSIGNED en otro caso). Desde RECEIVED/DIAGNOSING. complete=false deja DIAGNOSING; complete=true pasa a AWAITING_AUTHORIZATION y bloquea posteriores ediciones.' });

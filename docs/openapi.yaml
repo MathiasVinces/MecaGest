@@ -788,6 +788,109 @@ paths:
               vehicleId: 11111111-1111-4111-8111-111111111111
               mechanicId: 11111111-1111-4111-8111-111111111111
               reason: Ruido al frenar
+  /api/intakes:
+    post:
+      operationId: receiveVehicle
+      summary: Recibir vehículo con un solo guardado
+      description: "ADMIN o RECEPTIONIST. Placa conocida: reutiliza vehículo y propietario. Placa nueva: requiere
+        newVehicle con propietario nuevo o clientId existente. Cliente, vehículo y orden se guardan en una
+        sola transacción. 409 si la placa ya existe y se envían datos nuevos o si tiene orden abierta. No
+        modifica propietarios existentes."
+      tags:
+        - CU-01 Ingreso
+      responses:
+        "201":
+          description: Operación completada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderDetail"
+        "400":
+          description: El cuerpo no contiene JSON válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_JSON
+                  message: El cuerpo no contiene JSON válido
+        "401":
+          description: Inicia sesión para continuar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: UNAUTHENTICATED
+                  message: Inicia sesión para continuar
+        "403":
+          description: Tu rol no permite esta operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: FORBIDDEN
+                  message: Tu rol no permite esta operación
+        "404":
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Orden no encontrada
+        "409":
+          description: La operación no se permite en el estado actual
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INVALID_STATE
+                  message: La operación no se permite en el estado actual
+        "413":
+          description: El cuerpo excede 32 KB
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: BODY_TOO_LARGE
+                  message: El cuerpo excede 32 KB
+        "422":
+          description: Revisa los campos de la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Revisa los campos de la solicitud
+        "500":
+          description: No se pudo completar la operación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error:
+                  code: INTERNAL_ERROR
+                  message: No se pudo completar la operación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IntakeInput"
   /api/orders/{id}:
     get:
       operationId: getOrder
@@ -1954,3 +2057,51 @@ components:
           type: string
           minLength: 1
           maxLength: 2000
+    IntakeInput:
+      type: object
+      additionalProperties: false
+      required:
+        - plate
+        - mechanicId
+        - reason
+      properties:
+        plate:
+          type: string
+          maxLength: 14
+          pattern: ^[a-zA-Z0-9 -]+$
+          description: Se eliminan espacios y guiones y se convierte a mayúsculas. El resultado debe tener entre 5 y 10
+            letras o dígitos.
+        mechanicId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        newVehicle:
+          type: object
+          additionalProperties: false
+          required:
+            - brand
+            - model
+            - owner
+          properties:
+            brand:
+              type: string
+              minLength: 1
+              maxLength: 80
+            model:
+              type: string
+              minLength: 1
+              maxLength: 80
+            owner:
+              oneOf:
+                - type: object
+                  additionalProperties: false
+                  required:
+                    - clientId
+                  properties:
+                    clientId:
+                      type: string
+                      format: uuid
+                - $ref: "#/components/schemas/ClientInput"

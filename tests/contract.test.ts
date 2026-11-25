@@ -41,6 +41,7 @@ it('las respuestas reales del recorrido completo cumplen los esquemas OpenAPI', 
   conforms('/api/clients', 'post', { status: 201, body: f.client });
   conforms('/api/vehicles', 'post', { status: 201, body: f.vehicle });
   conforms('/api/orders', 'post', { status: 201, body: f.order });
+  conforms('/api/intakes', 'post', await f.api.post('/api/intakes').set('Authorization', f.bearer()).send({ plate: 'NEW2026', reason: 'Revisar ruido', mechanicId: f.ids.mecanico, newVehicle: { brand: 'Toyota', model: 'Corolla', owner: { clientId: f.client.id } } }).expect(201));
   conforms('/api/orders/{id}', 'get', await f.api.get(`/api/orders/${f.order.id}`).set('Authorization', f.bearer()).expect(200));
   conforms('/api/orders/{id}/diagnosis', 'put', await f.diagnose());
   conforms('/api/orders/{id}/authorization', 'post', await f.approve());
@@ -55,6 +56,7 @@ it('las respuestas reales del recorrido completo cumplen los esquemas OpenAPI', 
 it('los errores de autenticación, validación, permisos y estado cumplen el contrato', async () => {
   conforms('/api/orders', 'get', await f.api.get('/api/orders').expect(401));
   conforms('/api/orders', 'post', await f.api.post('/api/orders').set('Authorization', f.bearer()).send({}).expect(422));
+  conforms('/api/intakes', 'post', await f.api.post('/api/intakes').set('Authorization', f.bearer()).send({}).expect(422));
   conforms('/api/orders/{id}/authorization', 'post', await f.api.post(`/api/orders/${f.order.id}/authorization`).set('Authorization', f.bearer('mecanico')).send({ decision: 'APPROVED', evidence: 'Prueba' }).expect(403));
   conforms('/api/orders/{id}/repair/start', 'post', await f.api.post(`/api/orders/${f.order.id}/repair/start`).set('Authorization', f.bearer()).expect(409));
 });
