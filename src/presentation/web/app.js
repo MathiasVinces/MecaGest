@@ -73,28 +73,11 @@ async function loadData() {
 
 function renderLogin() {
   document.title = 'MecaGest · Iniciar sesión';
-  root.innerHTML = `<div class="login-layout">
-    <section class="login-story" aria-label="MecaGest">
-      <div class="brand"><img src="/assets/logo.svg" alt=""><strong>MecaGest</strong></div>
-      <div class="login-copy"><div class="eyebrow">Gestión para tu taller</div><h1>Cada vehículo.<br>Cada servicio.<br><em>Todo en orden.</em></h1><p>Del primer diagnóstico a la entrega final, acompaña cada trabajo desde un solo lugar.</p>
-        <svg class="workshop-drawing" viewBox="0 0 440 180" fill="none" aria-hidden="true"><path d="M15 151h410M65 145V30h9v115M363 145V30h9v115M61 29h17M359 29h17" stroke="#467180" stroke-width="2"/><path d="m105 92 24-43h169l30 43M107 92h220l18 18v25H91v-25l16-18Z" fill="#153f4d" stroke="#78bdc1" stroke-width="2"/><path d="m145 62-13 29h165l-20-29H145Z" fill="#255665" stroke="#78bdc1" stroke-width="2"/><rect x="107" y="135" width="29" height="17" rx="4" fill="#102b39" stroke="#78bdc1" stroke-width="2"/><rect x="301" y="135" width="29" height="17" rx="4" fill="#102b39" stroke="#78bdc1" stroke-width="2"/><path d="M108 110h39M291 110h39M188 118h58" stroke="#6dd5c2" stroke-width="5"/><path d="M73 133h17M345 133h19M172 49l9 43M253 49l-4 43" stroke="#78bdc1" stroke-width="2"/><circle cx="402" cy="60" r="17" fill="#174d50"/><path d="m394 60 5 5 10-11" stroke="#65dbc2" stroke-width="2"/></svg>
-      </div><div class="story-footer">${icon('shield')}<span>Un espacio de trabajo para cada rol del taller.</span></div>
-    </section>
-    <main class="login-panel" id="main-content"><div class="login-card"><div class="welcome-icon">${icon('wrench')}</div><h2>Bienvenido a MecaGest</h2><p class="muted">Ingresa a tu espacio de trabajo.</p>
-      <form id="login-form"><div class="login-error" role="alert"></div>
-        ${input('username', 'Usuario', { placeholder: 'Tu nombre de usuario', autocomplete: 'username', max: 80 })}
-        <div class="field"><label for="password">Contraseña</label><div class="password-wrap"><input type="password" name="password" id="password" autocomplete="current-password" required maxlength="128" placeholder="Ingresa tu contraseña"><button type="button" class="icon-button" data-action="toggle-password" aria-label="Mostrar contraseña" aria-pressed="false">${icon('eye')}</button></div></div>
-        <button class="btn primary full" type="submit">Ingresar al taller</button>
-      </form><p class="login-footnote">Usa la cuenta asignada por el administrador. Tus permisos se aplican automáticamente al iniciar sesión.</p>
-    </div></main></div>`;
+  root.innerHTML = `<main class="login-layout" id="main-content"><section class="login-story"><div class="brand"><img src="/assets/logo.svg" alt=""><strong>MecaGest<span>EL CUADERNO DE TU TALLER</span></strong></div><div class="login-copy"><p class="eyebrow">Menos papeles. Más taller.</p><h1>Un trabajo<br>bien llevado.</h1><p>Recibe el vehículo. Sigue la reparación.<br>Encuentra lo que hiciste.</p></div><div class="shop-sign"><span>RECEPCIÓN</span><span>REVISIÓN</span><span>REPARACIÓN</span></div></section><section class="login-panel"><div class="login-card"><p class="eyebrow">Vamos al trabajo</p><h2>Bienvenido a MecaGest</h2><p class="muted">Entra con tu cuenta del taller.</p><form id="login-form"><div class="login-error" role="alert"></div>${input('username','Usuario',{autocomplete:'username',max:80})}<div class="field"><label for="password">Contraseña</label><div class="password-wrap"><input type="password" name="password" id="password" autocomplete="current-password" required maxlength="128"><button type="button" class="icon-button" data-action="toggle-password" aria-label="Mostrar contraseña" aria-pressed="false">${icon('eye')}</button></div></div><button class="btn primary full" type="submit">Ingresar al taller</button></form><p class="login-footnote">¿No recuerdas tu acceso? Pide ayuda al encargado.</p></div></section></main>`;
 }
 
 function renderShell() {
-  const navigation = [['inicio', 'Resumen', 'grid'], ['ordenes', 'Órdenes de trabajo', 'orders'], ['vehiculos', 'Vehículos', 'car'], ...(isReception() ? [['clientes', 'Clientes', 'people']] : []), ...(canHistory() ? [['historial', 'Historial', 'history']] : [])];
-  root.innerHTML = `<div class="shell"><aside class="sidebar"><a class="brand" href="#inicio"><img src="/assets/logo.svg" alt=""><span><strong>MecaGest</strong><span class="brand-caption">GESTIÓN DEL TALLER</span></span></a>
-    <p class="eyebrow nav-caption">Espacio de trabajo</p><nav aria-label="Navegación principal">${navigation.map(([path, label, symbol]) => `<a class="nav-item" href="#${path}" data-nav="${path}">${icon(symbol)}${label}</a>`).join('')}</nav>
-    <div class="sidebar-bottom"><div class="workshop-note">${icon('building')}<div><strong>Mi taller</strong><span>Servicios y mantenimiento</span></div></div></div>
-  </aside><div class="main-area"><header class="topbar"><span class="topbar-label">${icon('building')}Panel del taller</span><div class="account"><div class="avatar" aria-hidden="true">${esc(state.user.username.slice(0, 2).toUpperCase())}</div><div><div class="account-name">${esc(state.user.username)}</div><div class="account-role">${roleNames[state.user.role]}</div></div><button class="icon-button" data-action="logout" title="Cerrar sesión o cambiar de usuario" aria-label="Cerrar sesión">${icon('logout')}</button></div></header><main id="main-content" class="main-content" tabindex="-1"></main></div></div>`;
+  root.innerHTML = `<div class="shell"><header class="masthead"><a class="brand" href="#inicio"><img src="/assets/logo.svg" alt=""><strong>MecaGest<span>EL CUADERNO DE TU TALLER</span></strong></a><nav aria-label="Navegación principal"><a class="nav-item" href="#inicio" data-nav="inicio">Taller</a>${canHistory()?'<a class="nav-item" href="#historial" data-nav="historial">Historial</a>':''}<a class="nav-item" href="#archivo" data-nav="archivo">Archivo</a></nav><div class="account"><span>${esc(state.user.username)}<small>${roleNames[state.user.role]}</small></span><button class="btn exit-button" data-action="logout" aria-label="Cerrar sesión">Salir</button></div></header><main id="main-content" class="main-content" tabindex="-1"></main><footer class="site-footer"><strong>MecaGest</strong><span>Cada trabajo tiene su historia.</span></footer></div>`;
 }
 
 function heading(title, subtitle, actions = '', eyebrow = '') {
@@ -102,7 +85,7 @@ function heading(title, subtitle, actions = '', eyebrow = '') {
 }
 
 function orderTable(orders, compact = false) {
-  if (!orders.length) return empty('No hay órdenes para mostrar', 'Las órdenes aparecerán aquí cuando registres un ingreso.', 'orders', isReception() ? actionButton('new-order', 'Nueva orden') : '');
+  if (!orders.length) return empty('No hay órdenes para mostrar', 'Las órdenes aparecerán aquí cuando registres un ingreso.', 'orders', isReception() ? actionButton('new-order', 'Recibir vehículo') : '');
   return `<div class="table-scroll"><table><thead><tr><th>Vehículo / orden</th>${compact ? '' : '<th>Motivo de ingreso</th>'}<th>Estado</th><th class="hide-mobile">Fecha de ingreso</th><th><span class="sr-only">Detalle</span></th></tr></thead><tbody>${orders.map(order => {
     const vehicle = vehicleFor(order.vehicleId);
     return `<tr><td><div class="vehicle-cell"><span class="plate-icon">${icon('car')}</span><div><span class="plate">${esc(vehicle?.plate ?? 'Vehículo')}</span><span class="secondary-line">${esc(compact ? `${vehicle?.brand ?? ''} ${vehicle?.model ?? ''}` : orderCode(order.id))}</span></div></div></td>${compact ? '' : `<td><span>${esc(order.reason.length > 64 ? order.reason.slice(0, 64) + '…' : order.reason)}</span><span class="secondary-line">${esc(mechanicName(order.mechanicId))}</span></td>`}<td>${badge(order.status)}</td><td class="hide-mobile">${date(order.createdAt)}</td><td>${openOrder(order.id)}</td></tr>`;
@@ -110,23 +93,25 @@ function orderTable(orders, compact = false) {
 }
 
 function renderDashboard() {
-  const orders = state.orders;
-  const active = orders.filter(o => !['COMPLETED', 'REJECTED'].includes(o.status));
-  const waiting = orders.filter(o => o.status === 'AWAITING_AUTHORIZATION');
-  const repairing = orders.filter(o => ['IN_REPAIR', 'BLOCKED'].includes(o.status));
-  const completed = orders.filter(o => o.status === 'COMPLETED');
-  const queue = orders.filter(o => ['AWAITING_AUTHORIZATION', 'BLOCKED'].includes(o.status)).slice(0, 3);
-  const stats = [['Órdenes activas', active.length, 'Servicios en seguimiento', 'orders'], ['Por autorizar', waiting.length, 'Pendientes de una decisión', 'clock'], ['En reparación', repairing.length, 'Incluye trabajos en espera', 'wrench'], ['Finalizadas', completed.length, 'Servicios completados', 'checkCircle']];
-  const counts = ['RECEIVED', 'DIAGNOSING', 'AUTHORIZED'].map(s => [s, orders.filter(o => o.status === s).length]);
-  return heading('Tu taller, en orden.', 'Consulta el avance de los servicios y organiza el siguiente paso.', isReception() ? actionButton('new-order', 'Nueva orden') : actionButton('refresh', 'Actualizar', 'refresh', 'secondary'), 'Resumen del taller') +
-    `<section class="stats" aria-label="Resumen de órdenes">${stats.map(([label, count, hint, symbol]) => `<div class="stat"><div class="stat-top"><span>${label}</span><span class="stat-icon">${icon(symbol)}</span></div><div class="stat-value">${count}</div><div class="stat-sub">${hint}</div></div>`).join('')}</section>
-    <div class="dashboard-grid"><section class="panel"><div class="panel-heading"><div><h2>Órdenes recientes</h2><p>El movimiento más reciente de tu taller.</p></div><a class="btn quiet" href="#ordenes">Ver todas</a></div>${orderTable(orders.slice(0, 6), true)}<div class="panel-footer">${state.vehicles.length} ${state.vehicles.length === 1 ? 'vehículo registrado' : 'vehículos registrados'} · ${orders.length} ${orders.length === 1 ? 'orden en total' : 'órdenes en total'}</div></section>
-    <aside class="dashboard-side"><section class="panel"><div class="panel-heading"><h2 class="queue-heading">${icon('alert')}Requieren atención</h2><span class="count-pill">${orders.filter(o => ['AWAITING_AUTHORIZATION', 'BLOCKED'].includes(o.status)).length}</span></div>${queue.length ? `<div class="queue">${queue.map(o => `<div class="queue-item"><div class="queue-head"><strong class="plate">${esc(vehicleFor(o.vehicleId)?.plate)}</strong>${badge(o.status)}</div><p>${o.status === 'BLOCKED' ? 'Hay una incidencia pendiente de resolver.' : 'El diagnóstico está listo para la decisión del cliente.'}</p>${openOrder(o.id)}</div>`).join('')}</div>` : empty('Todo al día', 'No hay autorizaciones o incidencias pendientes.', 'checkCircle')}</section>
-    <section class="panel process-panel"><div class="panel-heading"><h2>Próximos pasos</h2></div><div class="process-list">${counts.map(([s, n], i) => `<div class="process-row"><span class="process-label"><span class="process-icon">${icon(['car', 'search', 'shield'][i])}</span>${['Ingresos por revisar', 'Diagnósticos en curso', 'Listas para reparar'][i]}</span><strong>${n}</strong></div>`).join('')}</div></section></aside></div>`;
+  const active = state.orders.filter(o => !['COMPLETED','REJECTED'].includes(o.status));
+  return `<div class="workbench"><section class="welcome-board"><p class="eyebrow">Tu jornada, sin enredos</p><h1>El taller,<br>a la vista.</h1><p>Recibe un vehículo o continúa<br>un trabajo pendiente.</p>${isReception()?actionButton('new-order','Recibir vehículo','plus'):actionButton('refresh','Actualizar trabajos','refresh')}<div class="board-count"><strong>${active.length}</strong><span>${active.length===1?'vehículo en el taller':'vehículos en el taller'}</span></div></section><section class="work-list"><div class="list-heading"><h2>Trabajos en curso</h2><a class="text-link" href="#ordenes">Ver todos</a></div><div class="search-wrap">${icon('search')}<input id="work-search" aria-label="Buscar trabajo por placa" placeholder="Escribe una placa para encontrarla"></div><div id="work-items">${workTickets(active)}</div></section></div>`;
+}
+
+function nextTask(order) {
+  return {RECEIVED:'Revisar vehículo',DIAGNOSING:'Continuar revisión',AWAITING_AUTHORIZATION:'Consultar al cliente',AUTHORIZED:'Comenzar reparación',IN_REPAIR:'Continuar trabajo',BLOCKED:'Resolver demora',COMPLETED:'Ver trabajo terminado',REJECTED:'Ver decisión'}[order.status];
+}
+
+function workTickets(orders) {
+  if (!orders.length) return empty('No hay trabajos pendientes','Cuando recibas un vehículo, lo encontrarás aquí.','wrench');
+  return orders.map(o=>{const v=vehicleFor(o.vehicleId);return `<article class="work-ticket"><div class="ticket-head"><strong class="license">${esc(v?.plate)}</strong>${badge(o.status)}</div><p class="vehicle-name">${esc(v?.brand)} ${esc(v?.model)}</p><p class="ticket-reason">${esc(o.reason)}</p><div class="ticket-bottom"><span>${esc(mechanicName(o.mechanicId))}</span><a class="btn secondary" href="#orden/${o.id}">${nextTask(o)}</a></div></article>`;}).join('');
+}
+
+function renderArchive() {
+  return heading('Archivo del taller','Los datos guardados, cuando los necesites.')+`<div class="archive-links"><a href="#vehiculos">${icon('car')}<span><strong>Vehículos</strong><small>Placas y datos del vehículo</small></span></a>${isReception()?`<a href="#clientes">${icon('people')}<span><strong>Clientes</strong><small>Nombres y teléfonos de contacto</small></span></a>`:''}<a href="#ordenes">${icon('orders')}<span><strong>Todos los trabajos</strong><small>En curso, terminados y rechazados</small></span></a></div>`;
 }
 
 function renderOrders() {
-  return heading('Órdenes de trabajo', 'Sigue cada servicio desde el ingreso hasta su finalización.', isReception() ? actionButton('new-order', 'Nueva orden') : '') + `<section class="panel"><div class="toolbar"><div class="search-wrap">${icon('search')}<input id="list-search" aria-label="Buscar órdenes" placeholder="Buscar por placa, motivo o código…" value="${esc(state.search)}"></div><select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option>${Object.entries(statusNames).map(([key, name]) => `<option value="${key}" ${state.filter === key ? 'selected' : ''}>${name}</option>`).join('')}</select><span class="result-count" id="result-count"></span></div><div id="list-content"></div></section>`;
+  return heading('Órdenes de trabajo', 'Sigue cada servicio desde el ingreso hasta su finalización.', isReception() ? actionButton('new-order', 'Recibir vehículo') : '') + `<section class="panel"><div class="toolbar"><div class="search-wrap">${icon('search')}<input id="list-search" aria-label="Buscar órdenes" placeholder="Buscar por placa, motivo o código…" value="${esc(state.search)}"></div><select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option>${Object.entries(statusNames).map(([key, name]) => `<option value="${key}" ${state.filter === key ? 'selected' : ''}>${name}</option>`).join('')}</select><span class="result-count" id="result-count"></span></div><div id="list-content"></div></section>`;
 }
 
 function renderClients() {
@@ -180,13 +165,13 @@ function actionPanel(order) {
     return `<section class="panel"><div class="closed-message">${icon(order.status === 'COMPLETED' ? 'checkCircle' : 'file')}<h2>${order.status === 'COMPLETED' ? 'Servicio finalizado' : 'Servicio rechazado'}</h2><p>Esta orden está cerrada. Sus registros permanecen disponibles para consulta.</p></div></section>`;
   }
   if (['RECEIVED', 'DIAGNOSING'].includes(order.status) && canWork(order)) {
-    content = `<div class="panel-heading"><div><h2>Registrar diagnóstico</h2><p>Documenta lo que necesita el vehículo.</p></div></div><div class="panel-body">${form('diagnosis-form', textarea('findings', 'Hallazgos', order.diagnosis?.findings) + textarea('recommendedWork', 'Trabajo recomendado', order.diagnosis?.recommendedWork) + select('complete', 'Estado del diagnóstico', [['true', 'Completo · solicitar autorización'], ['false', 'Pendiente · continuar revisión']], 'true', 'Un diagnóstico completo pasa a autorización y ya no se edita.'), 'Guardar diagnóstico')}</div>`;
+    content = `<div class="panel-heading"><div><h2>¿Qué necesita el vehículo?</h2><p>Revisa y deja claro qué se debe hacer.</p></div></div><div class="panel-body">${form('diagnosis-form', textarea('findings', 'Qué encontraste', order.diagnosis?.findings) + textarea('recommendedWork', 'Qué hay que hacer', order.diagnosis?.recommendedWork) + `<label class="check-option"><input type="checkbox" name="complete" value="true" checked> Revisión terminada. Consultar al cliente.</label><p class="field-note">Desmarca si necesitas seguir revisando. Al terminar, el diagnóstico queda guardado y no se edita.</p>`, 'Guardar revisión')}</div>`;
   } else if (order.status === 'AWAITING_AUTHORIZATION' && state.user.role === 'ADMIN') {
-    content = `<div class="panel-heading"><div><h2>Decisión del cliente</h2><p>Confirma su decisión antes de reparar.</p></div></div><div class="panel-body">${form('authorization-form', select('decision', 'Decisión', [['', 'Selecciona una decisión'], ['APPROVED', 'Autorizar reparación'], ['REJECTED', 'Rechazar servicio']]) + textarea('evidence', 'Constancia de la decisión', '', 'Indica cómo se recibió la aceptación o el rechazo. La decisión registrada es definitiva.'), 'Registrar decisión')}</div>`;
+    content = `<div class="panel-heading"><div><h2>¿El cliente acepta el trabajo?</h2><p>Consulta al cliente antes de continuar.</p></div></div><div class="panel-body">${form('authorization-form', `<fieldset class="choice-group"><legend>Decisión del cliente</legend><label><input type="radio" name="decision" value="APPROVED" required> Sí, acepta la reparación</label><label><input type="radio" name="decision" value="REJECTED" required> No, rechaza el servicio</label></fieldset>` + textarea('evidence', 'Cómo te confirmó su decisión', '', 'Indica cómo se recibió la aceptación o el rechazo. La decisión registrada es definitiva.'), 'Guardar decisión')}</div>`;
   } else if (order.status === 'AUTHORIZED' && canWork(order)) {
-    content = `<div class="panel-heading"><h2>Lista para trabajar</h2></div><div class="panel-body"><div class="callout">${icon('shield')}<p>El cliente autorizó el servicio. Puedes iniciar la reparación.</p></div>${form('start-form', '', 'Iniciar reparación')}</div>`;
+    content = `<div class="panel-heading"><h2>Ya puedes reparar.</h2></div><div class="panel-body"><div class="callout">${icon('shield')}<p>El cliente autorizó el servicio. Puedes iniciar la reparación.</p></div>${form('start-form', '', 'Iniciar reparación')}</div>`;
   } else if (['IN_REPAIR', 'BLOCKED'].includes(order.status) && canWork(order)) {
-    content = `<div class="panel-heading"><div><h2>Actualizar reparación</h2><p>Deja constancia de cada actividad.</p></div></div><div class="panel-body">${order.status === 'BLOCKED' ? `<div class="callout warn">${icon('clock')}<p>La orden está en espera. Registra la resolución para continuar el trabajo autorizado.</p></div>` : ''}${form('repair-form', textarea('activity', 'Actividad o resultado') + select('outcome', 'Resultado de la actualización', [['PROGRESS', 'En progreso · continuar reparación'], ['BLOCKED', 'En espera · registrar incidencia'], ['COMPLETED', 'Finalizada · cerrar orden']], 'PROGRESS', 'Al finalizar, describe el trabajo realizado y las comprobaciones. La orden quedará cerrada.'), 'Guardar actividad')}</div>`;
+    content = `<div class="panel-heading"><div><h2>¿Cómo va el trabajo?</h2><p>Cuenta qué hiciste y si el vehículo está listo.</p></div></div><div class="panel-body">${order.status === 'BLOCKED' ? `<div class="callout warn">${icon('clock')}<p>La orden está en espera. Registra la resolución para continuar el trabajo autorizado.</p></div>` : ''}${form('repair-form', textarea('activity', 'Actividad o resultado') + `<fieldset class="choice-group"><legend>¿En qué estado queda?</legend><label><input type="radio" name="outcome" value="PROGRESS" checked> Sigue en reparación</label><label><input type="radio" name="outcome" value="BLOCKED"> Hay una demora</label><label><input type="radio" name="outcome" value="COMPLETED"> Trabajo terminado</label></fieldset><p class="field-note">«Trabajo terminado» cierra la ficha. Describe antes el resultado y las comprobaciones realizadas.</p>`, 'Guardar actividad')}</div>`;
   } else {
     const message = order.status === 'AWAITING_AUTHORIZATION' ? 'El encargado debe registrar la decisión del cliente antes de continuar.' : 'El mecánico asignado o el administrador puede continuar esta orden. Tu cuenta tiene acceso de consulta.';
     return `<section class="panel"><div class="panel-heading"><h2>Siguiente paso</h2></div><div class="read-only">${icon('lock')}<p>${message}</p></div></section>`;
@@ -195,25 +180,17 @@ function actionPanel(order) {
 }
 
 function renderOrder(order) {
-  const v = vehicleFor(order.vehicleId);
-  const stage = { RECEIVED: 0, DIAGNOSING: 1, AWAITING_AUTHORIZATION: 2, AUTHORIZED: 2, IN_REPAIR: 3, BLOCKED: 3, COMPLETED: 4, REJECTED: 2 }[order.status];
-  const diagnosis = order.diagnosis;
-  const authorization = order.authorization;
-  return `<a class="back-link" href="#ordenes">Todas las órdenes</a>` +
-    heading(`<span class="order-heading"><span class="order-car-icon">${icon('car')}</span><span>${esc(v?.plate ?? 'Vehículo')}<span class="muted small" style="display:block;font-weight:400;letter-spacing:0;margin-top:6px">${esc(v?.brand)} ${esc(v?.model)} · ${esc(orderCode(order.id))}</span></span></span>`, '', badge(order.status)) +
-    `<div class="stepper" aria-label="Etapa actual: ${esc(statusNames[order.status])}">${[['Ingreso', 'car'], ['Diagnóstico', 'search'], ['Autorización', 'shield'], ['Reparación', 'wrench'], ['Finalización', 'checkCircle']].map(([title, symbol], index) => `<div class="step ${index < stage ? 'done' : index === stage ? 'current' : ''}"><span class="step-symbol">${icon(index < stage ? 'check' : symbol)}</span>${title}</div>`).join('')}</div>
-    <div class="detail-grid"><div class="detail-stack"><section class="panel"><div class="panel-heading"><h2>Información del ingreso</h2></div><div class="panel-body"><div class="details-meta"><div><span class="meta-label">Fecha de ingreso</span><span class="meta-value">${date(order.createdAt, true)}</span></div><div><span class="meta-label">Responsable</span><span class="meta-value">${esc(mechanicName(order.mechanicId))}</span></div>${isReception() ? `<div><span class="meta-label">Cliente</span><span class="meta-value">${esc(clientName(v?.clientId))}</span></div>` : ''}<div><span class="meta-label">Última actualización</span><span class="meta-value">${date(order.updatedAt, true)}</span></div></div><span class="meta-label">Motivo de ingreso</span><p class="text-block">${esc(order.reason)}</p></div></section>
-    <section class="panel"><div class="panel-heading"><h2>Diagnóstico</h2>${diagnosis ? `<span class="badge ${diagnosis.complete ? 'AUTHORIZED' : 'DIAGNOSING'}">${diagnosis.complete ? 'Completo' : 'Pendiente'}</span>` : ''}</div>${diagnosis ? `<div class="panel-body"><div class="diagnosis-block"><span class="meta-label">Hallazgos</span><p class="text-block">${esc(diagnosis.findings)}</p></div><div class="diagnosis-block"><span class="meta-label">Trabajo recomendado</span><p class="text-block">${esc(diagnosis.recommendedWork)}</p></div></div>` : empty('Pendiente de revisión', 'El diagnóstico del mecánico aparecerá aquí.', 'search')}</section>
-    ${authorization ? `<section class="panel"><div class="panel-heading"><h2>Autorización del cliente</h2>${badge(authorization.decision === 'APPROVED' ? 'AUTHORIZED' : 'REJECTED')}</div><div class="panel-body"><span class="meta-label">Constancia · ${date(authorization.createdAt, true)}</span><p class="text-block">${esc(authorization.evidence)}</p></div></section>` : ''}
-    <section class="panel"><div class="panel-heading"><h2>Registro de reparación</h2><span class="count-pill">${order.repairs.length} actividades</span></div>${order.repairs.length ? `<div class="panel-body"><ol class="timeline">${order.repairs.map(r => `<li><div class="timeline-top">${badge(r.outcome === 'PROGRESS' ? 'IN_REPAIR' : r.outcome)}<time datetime="${esc(r.createdAt)}">${date(r.createdAt, true)}</time></div><p>${esc(r.activity)}</p></li>`).join('')}</ol></div>` : empty('Aún no hay actividades', 'El registro comienza cuando la reparación está autorizada.', 'wrench')}</section></div>${actionPanel(order)}</div>`;
+  const v=vehicleFor(order.vehicleId), d=order.diagnosis, a=order.authorization;
+  const stage={RECEIVED:0,DIAGNOSING:0,AWAITING_AUTHORIZATION:1,AUTHORIZED:2,IN_REPAIR:2,BLOCKED:2,COMPLETED:3,REJECTED:1}[order.status];
+  return `<a class="back-link" href="#inicio">Volver al taller</a><div class="job-heading"><div><p class="eyebrow">Ficha de trabajo · ${esc(orderCode(order.id))}</p><h1 class="license">${esc(v?.plate)}</h1><p>${esc(v?.brand)} ${esc(v?.model)}</p></div>${badge(order.status)}</div><ol class="job-progress" aria-label="Etapa actual: ${esc(statusNames[order.status])}">${['Revisión','Permiso del cliente','Reparación','Terminado'].map((label,i)=>`<li class="${i<stage?'done':i===stage?'current':''}">${i<stage?icon('check'):''}${label}</li>`).join('')}</ol><div class="job-workspace"><div>${actionPanel(order)}</div><aside class="job-slip"><p class="eyebrow">Lo que nos pidieron</p><h2>${esc(order.reason)}</h2><dl><dt>Mecánico responsable</dt><dd>${esc(mechanicName(order.mechanicId))}</dd>${isReception()?`<dt>Cliente</dt><dd>${esc(clientName(v?.clientId))}</dd>`:''}<dt>Ingresó al taller</dt><dd>${date(order.createdAt,true)}</dd></dl>${d?`<div class="slip-note"><strong>Trabajo recomendado</strong><p>${esc(d.recommendedWork)}</p></div>`:''}</aside></div><details class="record-folder"><summary>Ver lo registrado <span>${order.repairs.length} actividades</span></summary><div class="record-body">${d?`<section><h2>Diagnóstico</h2><h3>Qué encontramos</h3><p>${esc(d.findings)}</p><h3>Trabajo recomendado</h3><p>${esc(d.recommendedWork)}</p></section>`:'<p>La revisión todavía no se ha registrado.</p>'}${a?`<section><h2>Decisión del cliente</h2>${badge(a.decision==='APPROVED'?'AUTHORIZED':'REJECTED')}<p>${esc(a.evidence)}</p><time>${date(a.createdAt,true)}</time></section>`:''}<section><h2>Registro de reparación</h2>${order.repairs.length?`<ol class="timeline">${order.repairs.map(r=>`<li><div class="timeline-top">${badge(r.outcome==='PROGRESS'?'IN_REPAIR':r.outcome)}<time>${date(r.createdAt,true)}</time></div><p>${esc(r.activity)}</p></li>`).join('')}</ol>`:'<p>Aún no se han registrado actividades.</p>'}</section></div></details>`;
 }
 
 async function renderRoute() {
   if (!state.user) return;
   const revision = ++state.revision;
   const current = route();
-  if ((current === 'clientes' && !isReception()) || (current.startsWith('historial') && !canHistory())) { location.hash = 'inicio'; return; }
-  const activeNav = current.startsWith('orden/') ? 'ordenes' : current.split('/')[0];
+  if ((['clientes','recibir'].includes(current) && !isReception()) || (current.startsWith('historial') && !canHistory())) { location.hash = 'inicio'; return; }
+  const activeNav = ['archivo','clientes','vehiculos','ordenes'].includes(current) ? 'archivo' : current.startsWith('historial') ? 'historial' : 'inicio';
   document.querySelectorAll('[data-nav]').forEach(link => {
     link.classList.toggle('active', link.dataset.nav === activeNav);
     if (link.dataset.nav === activeNav) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
@@ -236,8 +213,9 @@ async function renderRoute() {
     main.innerHTML = renderHistory(plate);
     if (plate) await searchHistory(plate, revision);
   } else {
-    main.innerHTML = ({ ordenes: renderOrders, clientes: renderClients, vehiculos: renderVehicles }[current] ?? renderDashboard)();
+    main.innerHTML = ({ archivo: renderArchive, recibir: renderIntake, ordenes: renderOrders, clientes: renderClients, vehiculos: renderVehicles }[current] ?? renderDashboard)();
     fillList();
+    if (current === 'recibir') updateIntake();
   }
 }
 
@@ -259,12 +237,37 @@ function newVehicle() {
   showDialog('Nuevo vehículo', 'Asocia el vehículo con su propietario.', 'vehicle-form', select('clientId', 'Cliente', [['', 'Selecciona un cliente'], ...state.clients.map(c => [c.id, c.name])]) + input('plate', 'Placa', { max: 14, placeholder: 'Ej. DEM-0001', hint: 'Se guarda en mayúsculas, sin espacios ni guiones.' }) + `<div class="form-row">${input('brand', 'Marca', { max: 80, placeholder: 'Ej. Chevrolet' })}${input('model', 'Modelo', { max: 80, placeholder: 'Ej. Aveo' })}</div>`, 'Guardar vehículo');
 }
 
-function newOrder() {
-  if (!state.vehicles.length) { notify('Primero registra el vehículo que ingresará al taller.'); newVehicle(); return; }
-  const available = state.vehicles.filter(v => !state.orders.some(o => o.vehicleId === v.id && !['COMPLETED', 'REJECTED'].includes(o.status)));
-  if (!available.length) { notify('Todos los vehículos registrados tienen una orden abierta. Registra otro vehículo o finaliza un servicio.', true); return; }
-  if (!state.mechanics.length) { notify('No hay mecánicos disponibles para asignar. Contacta al administrador.', true); return; }
-  showDialog('Nueva orden de trabajo', 'Registra la solicitud y asigna un responsable.', 'order-form', select('vehicleId', 'Vehículo', [['', 'Selecciona un vehículo'], ...available.map(v => [v.id, `${v.plate} · ${v.brand} ${v.model}`])], '', 'Solo aparecen vehículos sin una orden abierta.') + select('mechanicId', 'Mecánico responsable', [['', 'Selecciona un mecánico'], ...state.mechanics.map(m => [m.id, m.username])]) + textarea('reason', 'Motivo de ingreso', '', 'Describe la solicitud del cliente o el problema observado.'), 'Crear orden');
+function newOrder() { location.hash='recibir'; }
+
+function renderIntake() {
+  return `<a class="back-link" href="#inicio">Volver al taller</a>`+heading('Recibir vehículo','Escribe la placa. Si ya vino antes, usamos sus datos.')+`<div class="intake-layout"><form id="intake-form" class="intake-paper"><section><h2>¿Qué vehículo llegó?</h2>${input('intake-plate','Placa',{max:14,placeholder:'Ej. ABC-1234',hint:'Con o sin guiones.'})}<div id="vehicle-match" aria-live="polite"></div><div id="new-vehicle-fields" hidden><div class="form-row">${input('intake-brand','Marca',{max:80,placeholder:'Ej. Toyota',required:false})}${input('intake-model','Modelo',{max:80,placeholder:'Ej. Corolla',required:false})}</div><h2>¿Quién lo trae?</h2>${select('intake-owner','Cliente',[['new','Registrar un cliente nuevo'],...state.clients.map(c=>[c.id,c.name])])}<div id="new-owner-fields"><div class="form-row">${input('intake-name','Nombre del cliente',{min:2,max:100,required:false})}${input('intake-phone','Teléfono',{type:'tel',min:5,max:25,required:false})}</div></div></div></section><section><h2>¿En qué podemos ayudar?</h2>${textarea('intake-reason','Motivo de ingreso','','Por ejemplo: hace ruido al frenar.')}${select('intake-mechanic','Mecánico responsable',[...(state.mechanics.length===1?[]:[['','Elige quién lo revisará']]),...state.mechanics.map(m=>[m.id,m.username])],state.mechanics.length===1?state.mechanics[0].id:'')}</section><div class="form-error" role="alert"></div><div class="form-actions"><button class="btn primary" type="submit">Guardar ingreso</button></div></form><aside class="intake-help"><span class="big-mark">${icon('car')}</span><h2>Todo en una ficha.</h2><p>El cliente, el vehículo y su primer trabajo se guardan juntos.</p><p>Después te mostraremos el siguiente paso.</p></aside></div>`;
+}
+
+const normalizePlate=value=>value.replace(/[ -]/g,'').toUpperCase();
+function updateIntake() {
+  const plate=document.querySelector('#intake-plate'); if(!plate)return;
+  const value=normalizePlate(plate.value), vehicle=state.vehicles.find(v=>v.plate===value);
+  const valid=/^[A-Z0-9]{5,10}$/.test(value), fresh=valid&&!vehicle;
+  const section=document.querySelector('#new-vehicle-fields'); section.hidden=!fresh;
+  for(const name of ['brand','model']){const el=document.querySelector('#intake-'+name);el.disabled=!fresh;el.required=fresh;}
+  const owner=document.querySelector('#intake-owner');owner.disabled=!fresh;
+  const newOwner=fresh&&owner.value==='new';document.querySelector('#new-owner-fields').hidden=!newOwner;
+  for(const name of ['name','phone']){const el=document.querySelector('#intake-'+name);el.disabled=!newOwner;el.required=newOwner;}
+  const active=vehicle&&state.orders.find(o=>o.vehicleId===vehicle.id&&!['COMPLETED','REJECTED'].includes(o.status));
+  document.querySelector('#vehicle-match').innerHTML=active?`<div class="callout warn"><p>Este vehículo ya tiene un trabajo en curso.</p><a class="btn secondary" href="#orden/${active.id}">Abrir trabajo existente</a></div>`:vehicle?`<div class="match-card"><strong>${esc(vehicle.brand)} ${esc(vehicle.model)}</strong><span>Cliente: ${esc(clientName(vehicle.clientId))}</span><p>Ya tenemos sus datos. No tienes que escribirlos de nuevo.</p></div>`:fresh?'<p class="field-note">Primera visita. Completa estos datos una sola vez.</p>':'';
+  document.querySelector('#intake-form button[type="submit"]').disabled=!!active||!state.mechanics.length;
+}
+
+async function saveIntake(form,values) {
+  const plate=normalizePlate(String(values['intake-plate'])), vehicle=state.vehicles.find(v=>v.plate===plate);
+  const body={plate,mechanicId:values['intake-mechanic'],reason:values['intake-reason']};
+  if(!vehicle)body.newVehicle={brand:values['intake-brand'],model:values['intake-model'],owner:values['intake-owner']==='new'?{name:values['intake-name'],phone:values['intake-phone']}:{clientId:values['intake-owner']}};
+  const order=await api('/intakes',{method:'POST',body});
+  // La escritura ya terminó: no volver a enviar si falla la actualización de la lista.
+  form.querySelector('button[type="submit"]').textContent='Ingreso guardado';
+  form.dataset.saved='true';
+  try {await loadData();} catch {notify('Ingreso guardado. Recarga para consultar todos los datos.',true);}
+  location.hash=`orden/${order.id}`;
 }
 
 async function handleAction(action, button) {
@@ -290,6 +293,7 @@ async function handleAction(action, button) {
 }
 
 async function submitForm(form, values) {
+  if (form.id === 'intake-form') return saveIntake(form, values);
   if (form.id === 'login-form') {
     const session = await api('/auth/login', { method: 'POST', body: values, auth: false });
     state.token = session.token; state.user = session.user;
@@ -343,7 +347,7 @@ document.addEventListener('submit', async event => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
   event.preventDefault();
-  if (form.dataset.busy === 'true') return;
+  if (form.dataset.busy === 'true' || form.dataset.saved === 'true') return;
   form.dataset.busy = 'true';
   const errorBox = form.querySelector('[role="alert"]');
   if (errorBox) errorBox.textContent = '';
@@ -356,10 +360,13 @@ document.addEventListener('submit', async event => {
   catch (error) {
     if (errorBox?.isConnected) { errorBox.textContent = error.message; errorBox.scrollIntoView({ block: 'nearest' }); }
     else notify(error.message, true);
-  } finally { form.dataset.busy = 'false'; form.removeAttribute('aria-busy'); controls.forEach((control, index) => { control.disabled = disabledBefore[index]; }); }
+  } finally { form.dataset.busy = 'false'; form.removeAttribute('aria-busy'); controls.forEach((control, index) => { control.disabled = form.dataset.saved === 'true' || disabledBefore[index]; }); }
 });
-document.addEventListener('input', event => { if (event.target.id === 'list-search') { state.search = event.target.value; fillList(); } });
-document.addEventListener('change', event => { if (event.target.id === 'status-filter') { state.filter = event.target.value; fillList(); } });
+document.addEventListener('input', event => {
+  if(event.target.id==='intake-plate')updateIntake();
+  if(event.target.id==='work-search'){const q=normalizePlate(event.target.value);document.querySelector('#work-items').innerHTML=workTickets(state.orders.filter(o=>!['COMPLETED','REJECTED'].includes(o.status)&&vehicleFor(o.vehicleId)?.plate.includes(q)));}
+ if (event.target.id === 'list-search') { state.search = event.target.value; fillList(); } });
+document.addEventListener('change', event => { if(event.target.id==='intake-owner')updateIntake(); if (event.target.id === 'status-filter') { state.filter = event.target.value; fillList(); } });
 window.addEventListener('hashchange', () => {
   state.search = ''; state.filter = '';
   if (dialog.open) dialog.close();
