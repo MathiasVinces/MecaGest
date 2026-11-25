@@ -109,3 +109,11 @@ Los commits corresponden a trabajo realizado en esta sesión; no representan dí
 - Cambios: lanzador de Windows, consulta local de credenciales, README actualizado, arquitectura de la interfaz, trazabilidad y evidencia; guía de ocho minutos para el jueves 26 con formularios, preguntas y texto para Moodle.
 - Verificación: se conservan los resultados de 42 pruebas de backend y 14 de navegador del incremento anterior. Los comandos de la guía corresponden a los scripts versionados. No se incluyen datos ni contraseñas locales en Git.
 - Pendientes del equipo: ensayar, completar integrantes/paralelo y enviar la entrega. Las entrevistas y escenarios de calidad no medidos permanecen pendientes.
+
+## 14. Proteger el formulario mientras termina el guardado
+
+- Hallazgo: la primera ejecución remota de la interfaz aprobó backend y 13/14 pruebas de navegador; el recorrido móvil falló al escribir la siguiente actividad antes de terminar la actualización anterior.
+- Causa: solo se deshabilitaba el botón; los campos seguían editables y su contenido podía reemplazarse al refrescar la orden.
+- Corrección: capturar los datos y deshabilitar todos los controles hasta terminar la solicitud y el refresco; restaurar su estado previo ante error. La prueba retiene una petición para verificar explícitamente que no se permite editar durante el guardado.
+- Aislamiento de pruebas: cerrar conexiones del servidor de prueba al terminar, incluidas las conservadas por la interceptación de red, antes de cerrar SQLite.
+- Verificación: repetir controles de código y las 14 pruebas de navegador; observar CI después de publicar la corrección.

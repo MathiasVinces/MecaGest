@@ -289,8 +289,7 @@ async function handleAction(action, button) {
   }
 }
 
-async function submitForm(form) {
-  const values = Object.fromEntries(new FormData(form));
+async function submitForm(form, values) {
   if (form.id === 'login-form') {
     const session = await api('/auth/login', { method: 'POST', body: values, auth: false });
     state.token = session.token; state.user = session.user;
@@ -348,14 +347,16 @@ document.addEventListener('submit', async event => {
   form.dataset.busy = 'true';
   const errorBox = form.querySelector('[role="alert"]');
   if (errorBox) errorBox.textContent = '';
-  const buttons = [...form.querySelectorAll('button')];
-  buttons.forEach(button => { button.disabled = true; });
+  const values = Object.fromEntries(new FormData(form));
+  const controls = [...form.querySelectorAll('button, input, select, textarea')];
+  const disabledBefore = controls.map(control => control.disabled);
+  controls.forEach(control => { control.disabled = true; });
   form.setAttribute('aria-busy', 'true');
-  try { await submitForm(form); }
+  try { await submitForm(form, values); }
   catch (error) {
     if (errorBox?.isConnected) { errorBox.textContent = error.message; errorBox.scrollIntoView({ block: 'nearest' }); }
     else notify(error.message, true);
-  } finally { form.dataset.busy = 'false'; form.removeAttribute('aria-busy'); buttons.forEach(button => { button.disabled = false; }); }
+  } finally { form.dataset.busy = 'false'; form.removeAttribute('aria-busy'); controls.forEach((control, index) => { control.disabled = disabledBefore[index]; }); }
 });
 document.addEventListener('input', event => { if (event.target.id === 'list-search') { state.search = event.target.value; fillList(); } });
 document.addEventListener('change', event => { if (event.target.id === 'status-filter') { state.filter = event.target.value; fillList(); } });

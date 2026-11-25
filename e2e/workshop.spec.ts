@@ -16,7 +16,13 @@ const test = base.extend<{ workshop: Workshop }>({
     const server = context.app.listen(0, '127.0.0.1');
     await new Promise<void>(resolve => server.once('listening', resolve));
     try { await use({ ...context, password, users, url: `http://127.0.0.1:${(server.address() as AddressInfo).port}` }); }
-    finally { await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); context.db.close(); }
+    finally {
+      await new Promise<void>((resolve, reject) => {
+        server.close(error => error ? reject(error) : resolve());
+        server.closeAllConnections();
+      });
+      context.db.close();
+    }
   },
 });
 
@@ -73,7 +79,14 @@ test('completa ingreso, diagnóstico, autorización, reparación e historial usa
   await expect(page.getByText('La orden está en espera.', { exact: false })).toBeVisible();
   await page.getByLabel('Actividad o resultado').fill('Repuesto recibido e instalado');
   await page.getByLabel('Resultado de la actualización').selectOption('PROGRESS');
+  let releaseSave!: () => void;
+  const saveGate = new Promise<void>(resolve => { releaseSave = resolve; });
+  await page.route('**/api/orders/*/repairs', async route => { await saveGate; await route.continue(); }, { times: 1 });
   await page.getByRole('button', { name: 'Guardar actividad' }).click();
+  try {
+    await expect(page.getByLabel('Actividad o resultado')).toBeDisabled();
+    await expect(page.getByLabel('Resultado de la actualización')).toBeDisabled();
+  } finally { releaseSave(); }
   await page.getByLabel('Actividad o resultado').fill('Frenos comprobados; trabajo finalizado');
   await page.getByLabel('Resultado de la actualización').selectOption('COMPLETED');
   await page.getByRole('button', { name: 'Guardar actividad' }).click();
