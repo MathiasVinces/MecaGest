@@ -96,6 +96,7 @@ test("completa ingreso, diagnóstico, autorización, reparación e historial usa
   await page.screenshot({
     path: testInfo.outputPath("ingreso.png"),
     fullPage: true,
+    animations: "disabled",
   });
   await page.getByRole("button", { name: "Guardar ingreso" }).click();
   await expect(
@@ -161,6 +162,7 @@ test("completa ingreso, diagnóstico, autorización, reparación e historial usa
   await page.screenshot({
     path: testInfo.outputPath("orden-finalizada.png"),
     fullPage: true,
+    animations: "disabled",
   });
   await page.reload();
   await expect(
@@ -297,6 +299,7 @@ test("filtra registros y muestra contenido ingresado como texto, sin ejecutar HT
   await page.screenshot({
     path: testInfo.outputPath("resumen.png"),
     fullPage: true,
+    animations: "disabled",
   });
   await page.getByRole("link", { name: "Archivo", exact: true }).click();
   await page.getByRole("link", { name: "Clientes", exact: false }).click();
@@ -322,6 +325,33 @@ test("filtra registros y muestra contenido ingresado como texto, sin ejecutar HT
   ).toBe(true);
 });
 
+test("respeta movimiento reducido sin ocultar contenido ni bloquear controles", async ({
+  page,
+  workshop,
+}) => {
+  seedOrder(workshop);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await login(page, workshop);
+  await expect(page.locator(".work-ticket").first()).toHaveCSS(
+    "animation-name",
+    "none",
+  );
+  await expect(page.locator(".hero-art")).toHaveCSS("animation-name", "none");
+  await expect(page.locator(".workbench")).toHaveCSS("opacity", "1");
+  await page
+    .getByRole("button", { name: "Recibir vehículo", exact: true })
+    .click();
+  await expect(page.getByLabel("Placa", { exact: true })).toBeEditable();
+  const button = page.getByRole("button", { name: "Guardar ingreso" });
+  await expect(button).toHaveCSS("transition-duration", "0s");
+  expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(48);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
+
 test("recupera una sesión vencida y mantiene accesible la pantalla de ingreso", async ({
   page,
   workshop,
@@ -336,6 +366,7 @@ test("recupera una sesión vencida y mantiene accesible la pantalla de ingreso",
   await page.screenshot({
     path: testInfo.outputPath("acceso.png"),
     fullPage: true,
+    animations: "disabled",
   });
   expect(
     await page.evaluate(
